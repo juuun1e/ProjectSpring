@@ -46,7 +46,8 @@ CREATE TABLE carRegi (
     carModel VARCHAR2(50) NOT NULL, --차량모델
     charType VARCHAR2(20) NOT NULL, -- 충전방식
     regidate TIMESTAMP DEFAULT SYSTIMESTAMP, --차량등록날짜
-    FOREIGN KEY (memNickName) REFERENCES Member(memNickName),
+    memId VARCHAR2(100) NOT NULL UNIQUE,
+    FOREIGN KEY (memId) REFERENCES Member(memId),
     CONSTRAINT unique_carNum UNIQUE (carNum) -- 차량번호 중복등록 금지
 );
 
@@ -59,9 +60,9 @@ END;
 /
 
 -- Add some sample data
-INSERT INTO carRegi ( carNum, carBrand, carModel, charType, memId)
+INSERT INTO CarRegi ( carNo, carNum, carBrand, carModel, charType, regidate, memId)
 VALUES
-    ('12가4325', 'Tesla', 'Model S', 'DC콤보', 'bao@naver.com');
+    (cNo_seq.nextval,'12가4526', 'Tesla', 'Model S', 'DC콤보', SYSTIMESTAMP, 'bao@naver.com');
 COMMIT;
 
 SELECT * FROM  carRegi;
@@ -93,9 +94,6 @@ insert into nboard (bNo, writer, title, content, viewCnt, replyCnt, regidate)
 values(bNo_seq.nextval, '짠국', '물은 아껴써야 해', '북극곰이 죽고 있다구', 793, 382, SYSDATE);
 select * from nBoard;
 COMMIT;
-
-
-
 
 
 -- 2. mysql인 경우
