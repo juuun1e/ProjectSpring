@@ -1,6 +1,7 @@
 package dev.zeronelab.mybatis.web;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.zeronelab.mybatis.dao.nBoardMapper;
@@ -44,7 +44,6 @@ public class RestApiBoardController {
 
 		List<nBoardVO> list;
 
-		
 		if (cri != null) { // 만약 검색 조건이 null이 아니라면 검색 조건을 이용하여 목록을 가져옴
 			list = mapper.listSearch(cri);
 
@@ -58,15 +57,13 @@ public class RestApiBoardController {
 	private ListResponse<nBoardVO> createListResponse(List<nBoardVO> list, SearchCriteria cri) {
 		PageMaker pageMaker = new PageMaker();
 
-		
 		if (cri != null) { // 만약 검색 조건이 있다면
 			pageMaker.setCri(cri); // 페이징 정보에 검색 조건을 설정함
 			pageMaker.setTotalCount(mapper.listSearchCount(cri)); // 검색조건을 만족하는 전체 항목 개수를 설정함
 		} // 생성된 목록과 검색 조건을 이용하여 응답용 객체를 생성
-		return new ListResponse<> (list, pageMaker);
+		return new ListResponse<>(list, pageMaker);
 	}
 
-	
 	// 게시글 작성
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public String writePOST(@RequestBody nBoardVO vo) throws Exception {
@@ -79,14 +76,16 @@ public class RestApiBoardController {
 		return "succ";
 	}
 
-	
 	// 게시글 읽기
+
 	@RequestMapping(value = "/read", method = RequestMethod.POST)
-	public List<nBoardVO> read(@RequestParam("bNo") int bNo) throws Exception {
+	public List<nBoardVO> read(@RequestBody Map<String, Integer> request) throws Exception {
 		logger.info("read post ...........");
-		logger.info("bNo: " + bNo);
+		int bNo = request.get("bNo");
+		// bNo를 사용하여 필요한 작업 수행
 		List<nBoardVO> list = mapper.read(bNo);
 		return list;
-				 
+
 	}
+
 }
