@@ -8,7 +8,7 @@
 		resultType="dev.zeronelab.mybatis.vo.CarVO">
 		select *
 		from CarRegi
-		ORDER BY cNo DESC
+		ORDER BY carNo DESC
 	</select>
 
 

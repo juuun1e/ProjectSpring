@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class CarVO {
 
-	private int cNo;
+	private int carNo;
 	private String carNum;
 	private String carBrand;
 	private String carModel;
