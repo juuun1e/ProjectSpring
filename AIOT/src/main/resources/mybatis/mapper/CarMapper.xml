@@ -2,13 +2,13 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="dev.zeronelab.mybatis.dao.CarMapper">
+<mapper namespace="dev.zeronelab.mybatis.mapper.CarMapper">
 
 	<select id="selectCarList"
 		resultType="dev.zeronelab.mybatis.vo.CarVO">
 		select *
 		from CarRegi
-		ORDER BY cNo DESC
+		ORDER BY carNo DESC
 	</select>
 
 
@@ -41,7 +41,7 @@
 	<delete id="delete">
 
 		delete from CarRegi
-		where memNickName = #{memNickName} and carNum =#{carNum}
+		where memId = #{memId} and carNum =#{carNum}
 		
 	</delete>
 

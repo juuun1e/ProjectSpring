@@ -54,7 +54,7 @@ CREATE OR REPLACE TRIGGER cNo_trigger
 BEFORE INSERT ON carRegi
 FOR EACH ROW
 BEGIN
-    SELECT cNo_seq.NEXTVAL INTO :new.cNo FROM dual;
+    SELECT cNo_seq.NEXTVAL INTO :new.carNo FROM dual;
 END;
 /
 
@@ -65,6 +65,35 @@ VALUES
 COMMIT;
 
 SELECT * FROM  carRegi;
+
+
+--게시판
+CREATE SEQUENCE bNo_seq
+START WITH 1 INCREMENT BY 1  NOMAXVALUE  NOCYCLE;
+
+CREATE table nBoard (
+ bNo number PRIMARY KEY, 
+ writer varchar2(100) , 
+ title varchar2(500) ,
+ content CLOB,
+ viewCnt number(10) default 0,
+ replyCnt number(10),
+ regidate  TIMESTAMP DEFAULT SYSTIMESTAMP
+);
+
+CREATE OR REPLACE TRIGGER bNo_trigger
+BEFORE INSERT ON nBoard
+FOR EACH ROW
+BEGIN
+    SELECT bNo_seq.NEXTVAL INTO :new.bNo FROM dual;
+END;
+/
+
+insert into nboard (bNo, writer, title, content, viewCnt, replyCnt, regidate)
+values(bNo_seq.nextval, '짠국', '물은 아껴써야 해', '북극곰이 죽고 있다구', 793, 382, SYSDATE);
+select * from nBoard;
+COMMIT;
+
 
 
 

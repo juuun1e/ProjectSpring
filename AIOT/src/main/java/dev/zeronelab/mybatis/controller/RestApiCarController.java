@@ -1,4 +1,4 @@
-package dev.zeronelab.mybatis.web;
+package dev.zeronelab.mybatis.controller;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.zeronelab.mybatis.dao.CarMapper;
+import dev.zeronelab.mybatis.mapper.CarMapper;
 import dev.zeronelab.mybatis.vo.CarVO;
 
 /**

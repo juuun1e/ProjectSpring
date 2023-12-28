@@ -1,4 +1,4 @@
-package dev.zeronelab.mybatis.web;
+package dev.zeronelab.mybatis.controller;
 
 import java.util.Date;
 import java.util.List;
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.WebUtils;
 
-import dev.zeronelab.mybatis.dao.MemberMapper;
 import dev.zeronelab.mybatis.dto.LoginDTO;
+import dev.zeronelab.mybatis.mapper.MemberMapper;
 import dev.zeronelab.mybatis.vo.Member;
 import util.JwtUtils;
 import util.PasswordEncoder;

@@ -1,4 +1,4 @@
-package dev.zeronelab.mybatis.dao;
+package dev.zeronelab.mybatis.mapper;
 
 import java.util.List;
 
@@ -19,6 +19,6 @@ public interface nBoardMapper {
 
 	List<nBoardVO> read(int bNo);
 
-	
-	
+	void delete(int bNo);
+
 }

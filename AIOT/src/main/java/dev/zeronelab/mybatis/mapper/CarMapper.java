@@ -1,4 +1,4 @@
-package dev.zeronelab.mybatis.dao;
+package dev.zeronelab.mybatis.mapper;
 
 import java.util.List;
 

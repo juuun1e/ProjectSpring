@@ -11,5 +11,5 @@ public class nBoardVO {
   private String content;
   private int viewCnt;
   private int replyCnt;
-  private Date regdate;
+  private Date regidate;
 }
