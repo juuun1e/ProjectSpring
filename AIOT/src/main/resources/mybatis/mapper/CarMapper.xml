@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.zeronelab.mybatis.dao.CarMapper">
+
+	<select id="selectCarList"
+		resultType="dev.zeronelab.mybatis.vo.CarVO">
+		select *
+		from CarRegi
+		ORDER BY cNo DESC
+	</select>
+
+
+	<select id="read" resultType="dev.zeronelab.mybatis.vo.CarVO">
+
+		select *
+		from CarRegi
+		where memId =
+		#{memId}
+
+	</select>
+
+
+	<insert id="carRegi">
+
+		insert into CarRegi (carNum, carBrand, carModel, charType, memId)
+		values(#{carNum},#{carBrand},#{carModel},#{charType}, #{memId}) 
+
+	</insert>
+
+	<select id="carNumCK" resultType="dev.zeronelab.mybatis.vo.CarVO">
+
+		select *
+		from CarRegi
+		where carNum =
+		#{carNum}
+
+	</select>
+	
+	<delete id="delete">
+
+		delete from CarRegi
+		where memNickName = #{memNickName} and carNum =#{carNum}
+		
+	</delete>
+
+
+</mapper>

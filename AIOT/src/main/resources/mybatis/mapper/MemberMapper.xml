@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.zeronelab.mybatis.dao.MemberMapper">
+
+	<select id="selectMemberList"
+		resultType="dev.zeronelab.mybatis.vo.Member">
+		select *
+		from MEMBER
+		ORDER BY memNo DESC
+	</select>
+
+
+	<insert id="register">
+
+		insert into member (memName, memNickName, memId, memPw)
+		values(#{memName},#{memNickName},#{memId},#{memPw} )
+
+	</insert>
+
+	<select id="getHashedPasswordByEmail"
+		resultType="java.lang.String">
+
+		select memPw
+		from member
+		where memId = #{memId}
+
+	</select>
+
+	<select id="login" resultType="dev.zeronelab.mybatis.vo.Member"
+		parameterType="map">
+
+		select *
+		from member
+		where
+		memId = #{memId}
+		and memPw = #{memPw}
+
+	</select>
+
+	<select id="read" resultType="dev.zeronelab.mybatis.vo.Member">
+
+		select *
+		from member
+		where memNo =
+		#{memNo}
+
+	</select>
+
+
+	<update id="keepLogin">
+
+		update member
+		set sessionKey = #{sessionId},
+		sessionLimit = #{next}
+		where memId = #{memId}
+
+	</update>
+	<!-- <select id="checkUserWithSessionKey" resultType="dev.zeronelab.mybatis.vo.Member"> 
+		select * from member where sessionKey = #{value} and sessionlimit > now() 
+		</select> -->
+	<select id="emailCk" resultType="dev.zeronelab.mybatis.vo.Member">
+
+		select memNo, memId
+		from member
+		where memId = #{memId}
+
+	</select>
+
+	<select id="ninameCk" resultType="dev.zeronelab.mybatis.vo.Member">
+
+		select memNo, memId
+		from member
+		where memNickName = #{memNickName}
+
+	</select>
+
+	<select id="readMember" resultType="dev.zeronelab.mybatis.vo.Member">
+
+		select memId, memNickName, memName,
+		memPw, regdate
+		from member
+		where memId = #{memId}
+
+	</select>
+
+	<update id="modifyMember">
+
+		update member set memName = #{memName}, memNickName = #{memNickName}, memPw = #{memPw}
+		where memId = #{memId}
+
+	</update>
+
+
+	<update id="modifyName">
+
+		update member
+		set memName = #{memName}
+		where memId = #{memId}
+
+	</update>
+
+	<update id="modifyNiname">
+
+		update member
+		set memNickName = #{memNickName}
+		where memId =
+		#{memId}
+
+	</update>
+
+	<update id="modifyPw">
+
+		update member
+		set memPw = #{memPw}
+		where memId = #{memId}
+
+	</update>
+
+<!-- 	<update id="modifyLoca">
+
+		update member
+		set locagree =#{locagree}
+		where memId =
+		#{memId}
+
+	</update> -->
+
+	<delete id="delete">
+
+		delete from member
+		where memId = #{memId}
+	</delete>
+
+
+</mapper>
