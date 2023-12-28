@@ -82,7 +82,7 @@ public class RestApiBoardController {
 		logger.info("read post ...........");
 		int bNo = request.get("bNo");
 		// bNo를 사용하여 필요한 작업 수행
-		
+		mapper.updateCounts(bNo);
 		List<nBoardVO> list = mapper.read(bNo);
 		
 		return list;

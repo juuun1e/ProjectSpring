@@ -109,5 +109,11 @@
 		from nBoard
 		where bNo = #{bNo}
 	</delete>
-	
+	<update id="updateCounts">
+	<![CDATA[
+   update nBoard
+    set viewcnt = viewcnt + 1
+    where bNo = #{bNo}
+    ]]>
+	</update>
 </mapper>

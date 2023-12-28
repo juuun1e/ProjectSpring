@@ -20,5 +20,6 @@ public interface nBoardMapper {
 	List<nBoardVO> read(int bNo);
 
 	void delete(int bNo);
-
+	
+	void updateCounts(Integer bNo);
 }
