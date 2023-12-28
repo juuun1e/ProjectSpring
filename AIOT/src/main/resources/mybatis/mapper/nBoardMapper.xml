@@ -109,4 +109,5 @@
 		from nBoard
 		where bNo = #{bNo}
 	</delete>
+	
 </mapper>
