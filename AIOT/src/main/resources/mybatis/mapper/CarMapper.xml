@@ -41,7 +41,7 @@
 	<delete id="delete">
 
 		delete from CarRegi
-		where memNickName = #{memNickName} and carNum =#{carNum}
+		where memId = #{memId} and carNum =#{carNum}
 		
 	</delete>
 
