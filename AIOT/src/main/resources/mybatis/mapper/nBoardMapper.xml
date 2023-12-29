@@ -34,7 +34,7 @@
 		resultType="dev.zeronelab.mybatis.vo.nBoardVO">
     <![CDATA[
       SELECT * FROM nBoard
-      WHERE  bNo > 0     ]]>
+      ORDER BY regidate DESC    ]]>
 		<include refid="search"></include>
 	</select>
 
