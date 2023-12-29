@@ -60,9 +60,9 @@ END;
 /
 
 -- Add some sample data
-INSERT INTO CarRegi ( carNo, carNum, carBrand, carModel, charType, regidate, memId)
+INSERT INTO CarRegi ( carNum, carBrand, carModel, charType, memId)
 VALUES
-    (cNo_seq.nextval,'12가4526', 'Tesla', 'Model S', 'DC콤보', SYSTIMESTAMP, 'bao@naver.com');
+    ('12가4526', 'Tesla', 'Model S', 'DC콤보', 'bao@naver.com');
 COMMIT;
 
 SELECT * FROM  carRegi;
@@ -90,32 +90,77 @@ BEGIN
 END;
 /
 
-insert into nboard (bNo, writer, title, content, viewCnt, replyCnt, regidate)
-values(bNo_seq.nextval, '짠국', '물은 아껴써야 해', '북극곰이 죽고 있다구', 793, 382, SYSDATE);
+insert into nboard (writer, title, content, viewCnt, replyCnt)
+values('짠국', '물은 아껴써야 해', '북극곰이 죽고 있다구', 793, 382);
 select * from nBoard;
 COMMIT;
 
 
--- 2. mysql인 경우
--- root 계정으로 설정
-create database bootex default character set utf8;
-
-create user 'bootuser'@'localhost' identified by 'bootuser';
-grant all privileges on bootex.* to 'bootuser'@'localhost';
-
-create user 'bootuser'@'%' identified by 'bootuser';
-grant all privileges on bootex.* to 'bootuser'@'%';
-
-
--- bootuser 계정으로 설정
-use bootex;
-create table news (
-	title varchar(100),
-	journalist varchar(30),
-	reg_dt TIMESTAMP NOT NULL DEFAULT now(),
-	publisher varchar(30)	
+--댓글
+CREATE table nReply (
+ rNo number  primary KEY,
+ bNo number,
+ replytext varchar2(1000),
+ replyer varchar2(20),
+ updateRegdate TIMESTAMP DEFAULT SYSTIMESTAMP,
+ regdate TIMESTAMP DEFAULT SYSTIMESTAMP
 );
 
-insert into news (title,journalist,publisher) values('제목1', '홍길동', '조선일보');
-insert into news (title,journalist,publisher) values('제목2', '유재석', '한국일보');
-select * from news;
+ALTER TABLE nReply
+ADD CONSTRAINT fk_bNo
+FOREIGN KEY (bNo)
+REFERENCES nBoard(bNo)
+ON DELETE CASCADE;
+
+CREATE SEQUENCE nReplySeq
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+
+CREATE OR REPLACE TRIGGER rNo_trigger
+BEFORE INSERT ON nReply
+FOR EACH ROW
+BEGIN
+    SELECT nReplySeq.NEXTVAL INTO :new.rNo FROM dual;
+END;
+/
+
+INSERT INTO nReply (bNo, replyText, replyer)
+VALUES (72, '마자!! 지구를 지켜야 해!~', '하바오');
+
+
+--첨부파일
+CREATE TABLE nAttach (
+  fullName VARCHAR2(200),
+  bNo NUMBER,
+  aNo NUMBER,
+  regdate TIMESTAMP DEFAULT SYSTIMESTAMP
+);
+
+
+ALTER TABLE nAttach
+ADD CONSTRAINT fk_bNo_nAttach
+FOREIGN KEY (bNo)
+REFERENCES nBoard(bNo)
+ON DELETE CASCADE;
+
+CREATE SEQUENCE aNo_seq
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+
+
+CREATE OR REPLACE TRIGGER aNo_trigger
+BEFORE INSERT ON nReply
+FOR EACH ROW
+BEGIN
+    SELECT nReplySeq.NEXTVAL INTO :new.rNo FROM dual;
+END;
+/
+
+INSERT INTO nAttach (fullname, bNo)
+	VALUES ('모아나.jpg', 21);
+    
+select * from nattach;

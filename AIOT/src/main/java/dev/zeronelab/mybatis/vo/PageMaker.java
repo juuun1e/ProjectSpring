@@ -3,100 +3,103 @@ package dev.zeronelab.mybatis.vo;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-
 public class PageMaker {
 
-  private int totalCount;
-  private int startPage;
-  private int endPage;
-  private boolean prev;
-  private boolean next;
+	private int totalCount;
+	private int startPage;
+	private int endPage;
+	private boolean prev;
+	private boolean next;
+	private int totalPage;
 
-  private int displayPageNum = 10;
+	private int displayPageNum = 10;
 
-  private Criteria cri;
+	private Criteria cri;
 
+	public void setCri(Criteria cri) {
+		this.cri = cri;
+	}
 
-  public void setCri(Criteria cri) {
-    this.cri = cri;
-  }
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
 
-  public void setTotalCount(int totalCount) {
-    this.totalCount = totalCount;
+		calcData();
+	}
 
-    calcData();
-  }
+	private void calcData() {
 
-  private void calcData() {
+		endPage = (int) (Math.ceil(cri.getPage() / (double) displayPageNum) * displayPageNum);
+		startPage = (endPage - displayPageNum) + 1;
 
-    endPage = (int) (Math.ceil(cri.getPage() / (double) displayPageNum) * displayPageNum);
+		int tempEndPage = (int) (Math.ceil(totalCount / (double) cri.getPerPageNum()));
+		if (endPage > tempEndPage) {
+			endPage = tempEndPage;
+		}
 
-    startPage = (endPage - displayPageNum) + 1;
+		prev = startPage == 1 ? false : true;
+		next = endPage * cri.getPerPageNum() >= totalCount ? false : true;
 
-    int tempEndPage = (int) (Math.ceil(totalCount / (double) cri.getPerPageNum()));
+		 totalPage = (int) Math.ceil((double) totalCount / cri.getPerPageNum());
+	}
 
-    if (endPage > tempEndPage) {
-      endPage = tempEndPage;
-    }
+	public int getTotalCount() {
+		return totalCount;
+	}
 
-    prev = startPage == 1 ? false : true;
+	public int getStartPage() {
+		return startPage;
+	}
 
-    next = endPage * cri.getPerPageNum() >= totalCount ? false : true;
+	public int getEndPage() {
+		return endPage;
+	}
 
-  }
+	public boolean isPrev() {
+		return prev;
+	}
 
-  public int getTotalCount() {
-    return totalCount;
-  }
+	public boolean isNext() {
+		return next;
+	}
 
-  public int getStartPage() {
-    return startPage;
-  }
+	public int getDisplayPageNum() {
+		return displayPageNum;
+	}
 
-  public int getEndPage() {
-    return endPage;
-  }
+	public Criteria getCri() {
+		return cri;
+	}
 
-  public boolean isPrev() {
-    return prev;
-  }
+	public String makeQuery(int page) {
 
-  public boolean isNext() {
-    return next;
-  }
+		UriComponents uriComponents = UriComponentsBuilder.newInstance().queryParam("page", page)
+				.queryParam("perPageNum", cri.getPerPageNum()).build();
 
-  public int getDisplayPageNum() {
-    return displayPageNum;
-  }
+		return uriComponents.toUriString();
+	}
 
-  public Criteria getCri() {
-    return cri;
-  }
+	public String makeSearch(int page) {
 
-  public String makeQuery(int page) {
+		UriComponents uriComponents = UriComponentsBuilder.newInstance().queryParam("page", page)
+				.queryParam("perPageNum", cri.getPerPageNum())
+				.queryParam("searchType", ((SearchCriteria) cri).getSearchType())
+				.queryParam("keyword", ((SearchCriteria) cri).getKeyword()).build();
 
-    UriComponents uriComponents = UriComponentsBuilder.newInstance().queryParam("page", page)
-        .queryParam("perPageNum", cri.getPerPageNum()).build();
+		return uriComponents.toUriString();
+	}
 
-    return uriComponents.toUriString();
-  }
+	public int getTotalPage() {
+		return totalPage;
+	}
 
-  public String makeSearch(int page) {
+	public void setTotalPage(int totalPage) {
+		this.totalPage = totalPage;
+	}
 
-    UriComponents uriComponents = UriComponentsBuilder.newInstance().queryParam("page", page)
-        .queryParam("perPageNum", cri.getPerPageNum())
-        .queryParam("searchType", ((SearchCriteria) cri).getSearchType())
-        .queryParam("keyword", ((SearchCriteria) cri).getKeyword()).build();
-
-    return uriComponents.toUriString();
-  }
-
-  @Override
-  public String toString() {
-    return "PageMaker [totalCount=" + totalCount + ", startPage=" + startPage + ", endPage="
-        + endPage + ", prev=" + prev + ", next=" + next + ", displayPageNum=" + displayPageNum
-        + ", cri=" + cri + "]";
-  }
-
+	@Override
+	public String toString() {
+		return "PageMaker [totalCount=" + totalCount + ", startPage=" + startPage + ", endPage=" + endPage + ", prev="
+				+ prev + ", next=" + next + ", displayPageNum=" + displayPageNum + ", cri=" + cri + ",totalPage=" + totalPage + "]";
+	}
 
 }

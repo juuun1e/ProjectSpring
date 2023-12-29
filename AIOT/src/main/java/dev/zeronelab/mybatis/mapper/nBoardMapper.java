@@ -19,15 +19,11 @@ public interface nBoardMapper {
 	void write(nBoardVO vo);
 
 	List<nBoardVO> read(int bNo);
-
-	void delete(int bNo);
 	
 	void updateCounts(Integer bNo);
 	
-	//public void update(nBoardVO board,Integer bNo) throws Exception;
-	
-	// void update(@Param("vo")nBoardVO vo);
-	
-	void update(@Param("title") String title, @Param("content") String content, @Param("bNo") String bNo);
+	void update(@Param("title") String title, @Param("content") String content, @Param("bNo") Integer bNo);
+
+	void delete(int bNo);
 
 }

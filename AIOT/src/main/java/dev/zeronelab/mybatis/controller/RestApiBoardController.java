@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.zeronelab.mybatis.dto.ListResponse;
@@ -89,37 +88,14 @@ public class RestApiBoardController {
 		return list;
 	}
 
-	// 게시글 삭제
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
-	public String delete(@RequestBody Map<String, Integer> request) throws Exception {
-		logger.info("delete post ...........");
-		int bNo = request.get("bNo");
-		// bNo를 사용하여 필요한 작업 수행
-
-		mapper.delete(bNo);
-
-		return "succ";
-	}
-
-/*	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public String modify(@RequestBody Map<String, String> request,nBoardVO vo) throws Exception {
-	    logger.info("modifyPagingpost...........");
-	    // nBoardVO 객체에서 bNo를 가져와서 사용
-	    String bNo = request.get("bNo");
-	    logger.info("bNo is used: " + bNo);
-
-	    // 가져온 bNo를 사용하여 MyBatis의 update 메서드 호출
-	   mapper.update(vo);
-	    //logger.info(board.toString());
-	    return "succ";
-	}*/
-
+	
+	// 게시글 수정
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String modify(@RequestBody Map<String, Object> requestBody) throws Exception {
 	    logger.info("modifyPagingpost...........");
 
 	    // Extracting the post number, title, and content from the request body sent by the client
-	    String bNo = (String) requestBody.get("bNo");
+	    Integer bNo = (Integer) requestBody.get("bNo");
 	    String title = (String) requestBody.get("title");
 	    String content = (String) requestBody.get("content");
 
@@ -131,5 +107,16 @@ public class RestApiBoardController {
 	    return "success";
 	}
 
+	
+	// 게시글 삭제
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	public String delete(@RequestBody Map<String, Integer> request) throws Exception {
+		logger.info("delete post ...........");
+		int bNo = request.get("bNo");
+		// bNo를 사용하여 필요한 작업 수행
 
+		mapper.delete(bNo);
+
+		return "succ";
+	}
 }
