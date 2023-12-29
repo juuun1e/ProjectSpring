@@ -116,4 +116,13 @@
     where bNo = #{bNo}
     ]]>
 	</update>
+	
+	<update id="update" parameterType="map">
+		<![CDATA[
+		update nBoard
+		set title = #{title}, content = #{content}
+		where bNo = #{bNo}
+		]]>
+	</update>
+	
 </mapper>
