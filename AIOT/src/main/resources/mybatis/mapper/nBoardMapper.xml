@@ -16,7 +16,7 @@
             nBoard
     )numbered
     WHERE
-        numbered.rnum BETWEEN  #{pageStart} AND (#{pageStart} + #{perPageNum} -1)
+        numbered.rnum BETWEEN  #{pageStart} +1 AND (#{pageStart} + #{perPageNum})
     ORDER BY 
     	numbered.rnum
     ]]>
