@@ -5,14 +5,15 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import dev.zeronelab.mybatis.vo.Criteria;
 import dev.zeronelab.mybatis.vo.SearchCriteria;
 import dev.zeronelab.mybatis.vo.nBoardVO;
 
 @Mapper
 public interface nBoardMapper {
-	List<nBoardVO> selectBoardList() throws Exception;
+	List<nBoardVO> selectBoardList(Criteria cri) throws Exception;
 
-	List<nBoardVO> listSearch(SearchCriteria cri);
+	List<nBoardVO> listSearch(Criteria cri);
 
 	int listSearchCount(SearchCriteria cri);
 

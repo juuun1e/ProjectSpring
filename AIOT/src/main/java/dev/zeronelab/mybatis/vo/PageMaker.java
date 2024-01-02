@@ -18,20 +18,26 @@ public class PageMaker {
 
 	public void setCri(Criteria cri) {
 		this.cri = cri;
+		if (cri != null ) {
+			calcData();
+		}
 	}
 
 	public void setTotalCount(int totalCount) {
 		this.totalCount = totalCount;
-
+		System.out.println("totalCount: " + totalCount);
 		calcData();
 	}
 
 	private void calcData() {
 
-		endPage = (int) (Math.ceil(cri.getPage() / (double) displayPageNum) * displayPageNum);
+		endPage = (int) (Math.ceil(cri.getPage() / (double) displayPageNum) * displayPageNum); //Math.ceil(...) 소수점 이하를 올림 처리
 		startPage = (endPage - displayPageNum) + 1;
 
 		int tempEndPage = (int) (Math.ceil(totalCount / (double) cri.getPerPageNum()));
+		System.out.println("endPage: " + endPage);
+		System.out.println("tempEndPage: " + tempEndPage);
+
 		if (endPage > tempEndPage) {
 			endPage = tempEndPage;
 		}
@@ -39,7 +45,8 @@ public class PageMaker {
 		prev = startPage == 1 ? false : true;
 		next = endPage * cri.getPerPageNum() >= totalCount ? false : true;
 
-		 totalPage = (int) Math.ceil((double) totalCount / cri.getPerPageNum());
+		totalPage = (int) Math.ceil((double) totalCount / cri.getPerPageNum());
+		System.out.println("totalPage: " + totalPage);
 	}
 
 	public int getTotalCount() {
@@ -99,7 +106,8 @@ public class PageMaker {
 	@Override
 	public String toString() {
 		return "PageMaker [totalCount=" + totalCount + ", startPage=" + startPage + ", endPage=" + endPage + ", prev="
-				+ prev + ", next=" + next + ", displayPageNum=" + displayPageNum + ", cri=" + cri + ",totalPage=" + totalPage + "]";
+				+ prev + ", next=" + next + ", displayPageNum=" + displayPageNum + ", cri=" + cri + ",totalPage="
+				+ totalPage + "]";
 	}
 
 }
