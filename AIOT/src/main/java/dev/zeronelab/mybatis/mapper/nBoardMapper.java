@@ -27,5 +27,6 @@ public interface nBoardMapper {
 
 	void delete(int bNo);
 	
-	public void addAttach(String fileName)throws Exception;
+	public void addAttach(String imgName,String uuid,String path)throws Exception;
 }
+  

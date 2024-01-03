@@ -93,24 +93,27 @@ public class RestApiBoardController {
 	
 	//게시글 작성
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-    public String writePOST(nBoardDTO nBoardDTO,nBoardVO vo) throws Exception{
-        System.out.println("nBoardDTO: " + nBoardDTO);
-	
-        // MovieDTO 생성
-         mapper.write(vo);
-        
-        List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
-    
-        if (imageDTOList != null && !imageDTOList.isEmpty()) {
+	public String writePOST(nBoardDTO nBoardDTO, nBoardVO vo) throws Exception {
+	    System.out.println("nBoardDTO: " + nBoardDTO);
+
+	    // MovieDTO 생성
+	    mapper.write(vo);
+
+	    List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
+
+	    if (imageDTOList != null && !imageDTOList.isEmpty()) {
 	        for (nBoardImageDTO imageDTO : imageDTOList) {
-	            String fileName = imageDTO.getImgName();
-	           // String uuid = imageDTO.getUuid();
-	           // String folderPath = imageDTO.getPath();
-	            mapper.addAttach(fileName);
+	            String imgName = imageDTO.getImgName();
+	            String uuid = imageDTO.getUuid();
+	            String path = imageDTO.getPath();
+	            
+	          	           
+	            // mapper에 fileName, uuid, path 등을 활용한 로직 추가
+	            mapper.addAttach(imgName,uuid,path);
 	        }
 	    }
-        return "succ";
-    }
+	    return "succ";
+	}
 
 
 	// 게시글 수정
