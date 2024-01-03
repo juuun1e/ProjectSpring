@@ -78,31 +78,31 @@
 	<!-- 검색 조건 SQL -->
 	<sql id="search">
 		<if test="searchType != null">
-		 <where>
-			<if test="searchType == 't'.toString()">
-				AND title LIKE '%' || #{keyword} || '%'
-			</if>
-			<if test="searchType == 'c'.toString()">
-				AND content LIKE '%' || #{keyword} || '%'
-			</if>
-			<if test="searchType == 'w'.toString()">
-				AND writer LIKE '%' || #{keyword} || '%'
-			</if>
-			<if test="searchType == 'tc'.toString()">
-				AND (title LIKE '%' || #{keyword} || '%' OR content LIKE
-				'%'
-				|| #{keyword}
-				|| '%')
-			</if>
-			<if test="searchType == 'cw'.toString()">
-				AND (content LIKE '%' || #{keyword} || '%' OR writer LIKE
-				'%' ||
-				#{keyword} || '%')
-			</if>
-			<if test="searchType == 'tcw'.toString()">
-				AND (title LIKE '%' || #{keyword} || '%' OR content LIKE '%'
-				|| #{keyword} || '%' OR writer LIKE '%' || #{keyword} || '%')
-			</if>
+			<where>
+				<if test="searchType == 't'.toString()">
+					AND title LIKE '%' || #{keyword} || '%'
+				</if>
+				<if test="searchType == 'c'.toString()">
+					AND content LIKE '%' || #{keyword} || '%'
+				</if>
+				<if test="searchType == 'w'.toString()">
+					AND writer LIKE '%' || #{keyword} || '%'
+				</if>
+				<if test="searchType == 'tc'.toString()">
+					AND (title LIKE '%' || #{keyword} || '%' OR content LIKE
+					'%'
+					|| #{keyword}
+					|| '%')
+				</if>
+				<if test="searchType == 'cw'.toString()">
+					AND (content LIKE '%' || #{keyword} || '%' OR writer LIKE
+					'%' ||
+					#{keyword} || '%')
+				</if>
+				<if test="searchType == 'tcw'.toString()">
+					AND (title LIKE '%' || #{keyword} || '%' OR content LIKE '%'
+					|| #{keyword} || '%' OR writer LIKE '%' || #{keyword} || '%')
+				</if>
 			</where>
 		</if>
 	</sql>
@@ -130,7 +130,7 @@
 		from nBoard
 		where bNo = #{bNo}
 	</delete>
-	
+
 	<!-- 조회수 -->
 	<update id="updateCounts">
 	<![CDATA[
@@ -156,5 +156,22 @@
 	VALUES (#{imgName}, #{uuid}, #{path}, bNo_seq.CURRVAL)
 	]]>
 	</insert>
+	
+	<!-- <select id="getAttach" resultType="string" >
+	<![CDATA[
+		select imgName from nAttach where bNo = #{bNo} order by regdate
+			]]>
+	</select> -->
+	
+	<insert id="replaceAttach">
+<![CDATA[
+	INSERT INTO nAttach (imgName, uuid, path,  bNo)
+	VALUES (#{imgName}, #{uuid}, #{path}, #{bNo})
+]]>
+	</insert>
+	
+	<delete id="deleteAttach">
+delete from nAttach where bNo = #{bNo}
+</delete>
 
 </mapper>

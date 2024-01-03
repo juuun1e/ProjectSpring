@@ -31,5 +31,8 @@ public interface nBoardMapper {
 	
 	public void addAttach(String imgName,String uuid,String path)throws Exception;
 
+	public void replaceAttach(String imgName,String uuid,String path,Integer bNo)throws Exception;
+	
+	public void deleteAttach(Integer bNo)throws Exception;
 }
   
