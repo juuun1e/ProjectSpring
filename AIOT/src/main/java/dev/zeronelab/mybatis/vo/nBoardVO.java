@@ -12,4 +12,6 @@ public class nBoardVO {
   private int viewCnt;
   private int replyCnt;
   private Date regidate;
+  
+  private String[] Files;
 }

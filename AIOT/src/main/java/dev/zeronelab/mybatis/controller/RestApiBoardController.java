@@ -1,32 +1,28 @@
 package dev.zeronelab.mybatis.controller;
 
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.zeronelab.mybatis.dto.ListResponse;
+import dev.zeronelab.mybatis.dto.nBoardDTO;
+import dev.zeronelab.mybatis.dto.nBoardImageDTO;
 import dev.zeronelab.mybatis.mapper.nBoardMapper;
-import dev.zeronelab.mybatis.vo.Criteria;
 import dev.zeronelab.mybatis.vo.PageMaker;
 import dev.zeronelab.mybatis.vo.SearchCriteria;
 import dev.zeronelab.mybatis.vo.nBoardVO;
-import dev.zeronelab.mybatis.vo.nReplyVO;
 
 /**
  * Handles requests for the application home page.
@@ -112,20 +108,8 @@ public class RestApiBoardController {
 	    return entity;
 	}
 
+
 	
-	
-	// 게시글 작성
-	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String writePOST(@RequestBody nBoardVO vo) throws Exception {
-
-		logger.info(".............글 작성 post ...........");
-		logger.info(vo.toString());
-
-		mapper.write(vo);
-
-		return "succ";
-	}
-
 	// 게시글 읽기
 	@RequestMapping(value = "/read", method = RequestMethod.POST)
 	public List<nBoardVO> read(@RequestBody Map<String, Integer> request) throws Exception {
@@ -139,6 +123,29 @@ public class RestApiBoardController {
 	}
 
 	
+	
+	//게시글 작성
+	@RequestMapping(value = "/write", method = RequestMethod.POST)
+    public String writePOST(nBoardDTO nBoardDTO,nBoardVO vo) throws Exception{
+        System.out.println("nBoardDTO: " + nBoardDTO);
+	
+        // MovieDTO 생성
+         mapper.write(vo);
+        
+        List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
+    
+        if (imageDTOList != null && !imageDTOList.isEmpty()) {
+	        for (nBoardImageDTO imageDTO : imageDTOList) {
+	            String fileName = imageDTO.getImgName();
+	           // String uuid = imageDTO.getUuid();
+	           // String folderPath = imageDTO.getPath();
+	            mapper.addAttach(fileName);
+	        }
+	    }
+        return "succ";
+    }
+
+
 	// 게시글 수정
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String modify(@RequestBody Map<String, Object> requestBody) throws Exception {

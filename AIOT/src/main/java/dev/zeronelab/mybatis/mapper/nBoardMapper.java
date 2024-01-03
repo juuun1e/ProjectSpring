@@ -18,7 +18,8 @@ public interface nBoardMapper {
 	int listSearchCount(SearchCriteria cri);
 
 	void write(nBoardVO vo);
-
+	Long write(nBoardVO vo);
+	
 	List<nBoardVO> read(int bNo);
 	
 	void updateCounts(Integer bNo);
@@ -26,5 +27,6 @@ public interface nBoardMapper {
 	void update(@Param("title") String title, @Param("content") String content, @Param("bNo") Integer bNo);
 
 	void delete(int bNo);
-
+	
+	public void addAttach(String fileName)throws Exception;
 }
