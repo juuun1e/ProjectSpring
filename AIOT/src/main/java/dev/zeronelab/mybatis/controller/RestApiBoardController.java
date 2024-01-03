@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.zeronelab.mybatis.dto.nBoardDTO;
@@ -117,6 +118,7 @@ public class RestApiBoardController {
 
 
 	// 게시글 수정
+	/*
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String modify(@RequestBody Map<String, Object> requestBody) throws Exception {
 	    logger.info("modifyPagingpost...........");
@@ -132,8 +134,39 @@ public class RestApiBoardController {
 	    mapper.update(title, content, bNo);
 
 	    return "success";
-	}
+	}*/
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public String modify(@RequestBody Map<String, Object> requestBody,nBoardDTO nBoardDTO) throws Exception {
+	    logger.info("modifyPagingpost...........");
 
+	    // Extracting the post number, title, and content from the request body sent by the client
+	    Integer bNo = (Integer) requestBody.get("bNo");
+	    String title = (String) requestBody.get("title");
+	    String content = (String) requestBody.get("content");
+
+	    logger.info("Post number is used: " + bNo);
+
+	    // Calling the update method of MyBatis using the extracted values
+	    mapper.update(title, content, bNo);
+	    
+	    mapper.deleteAttach(bNo);
+	    
+	    List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
+
+	    if (imageDTOList != null && !imageDTOList.isEmpty()) {
+	        for (nBoardImageDTO imageDTO : imageDTOList) {
+	            String imgName = imageDTO.getImgName();
+	            String uuid = imageDTO.getUuid();
+	            String path = imageDTO.getPath();
+	            
+	          	           
+	            // mapper에 fileName, uuid, path 등을 활용한 로직 추가
+	            mapper.replaceAttach(imgName,uuid,path,bNo);
+	        }
+	    }
+	    return "succ";
+
+	}
 	
 	// 게시글 삭제
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
@@ -146,4 +179,11 @@ public class RestApiBoardController {
 
 		return "succ";
 	}
+	/*
+		@RequestMapping("/getAttach/{bNo}")
+		  @ResponseBody
+		  public List<String> getAttach(@PathVariable("bNo")Integer bNo)throws Exception{
+		    
+		    return mapper.getAttach(bNo);
+		  }  */
 }
