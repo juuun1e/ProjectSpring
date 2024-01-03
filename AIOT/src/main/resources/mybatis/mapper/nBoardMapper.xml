@@ -123,6 +123,8 @@
 		from nBoard
 		where bNo = #{bNo}
 	</delete>
+	
+	<!-- 조회수 -->
 	<update id="updateCounts">
 	<![CDATA[
    update nBoard
@@ -131,12 +133,21 @@
     ]]>
 	</update>
 
+	<!-- 글 수정 -->
 	<update id="update" parameterType="map">
-		<![CDATA[
-		update nBoard
-		set title = #{title}, content = #{content}
-		where bNo = #{bNo}
-		]]>
+	<![CDATA[
+	update nBoard
+	set title = #{title}, content = #{content}
+	where bNo = #{bNo}
+	]]>
 	</update>
+
+	<!-- 첨부파일 -->
+	<insert id="addAttach">
+	<![CDATA[
+	INSERT INTO nAttach (imgName, uuid, path,  bNo)
+	VALUES (#{imgName}, #{uuid}, #{path}, bNo_seq.CURRVAL)
+	]]>
+	</insert>
 
 </mapper>

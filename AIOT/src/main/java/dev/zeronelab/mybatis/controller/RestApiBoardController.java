@@ -24,10 +24,6 @@ import dev.zeronelab.mybatis.vo.PageMaker;
 import dev.zeronelab.mybatis.vo.SearchCriteria;
 import dev.zeronelab.mybatis.vo.nBoardVO;
 
-/**
- * Handles requests for the application home page.
- */
-
 @RestController
 @RequestMapping("/api/nBoard")
 public class RestApiBoardController {
@@ -36,35 +32,6 @@ public class RestApiBoardController {
 
 	@Autowired
 	private nBoardMapper mapper;
-
-	// 게시글 목록
-//	@RequestMapping(value = "/list", method = RequestMethod.GET)
-//	public ResponseEntity<ListResponse<nBoardVO>> listPage(@ModelAttribute(value = "cri") SearchCriteria cri,
-//			Model model, HttpServletResponse response) throws Exception {
-//
-//		logger.info(cri.toString());
-//
-//		List<nBoardVO> list;
-//
-//		if (cri != null) { // 만약 검색 조건이 null이 아니라면 검색 조건을 이용하여 목록을 가져옴
-//			list = mapper.listSearch(cri);
-//
-//		} else { // 검색 조건이 null이면 전체 목록을 가져옴
-//			list = mapper.selectBoardList();
-//		} // 생성된 목록과 검색 조건을 이용하여 응답용 객체를 생성
-//		ListResponse<nBoardVO> responseList = createListResponse(list, cri);
-//		return ResponseEntity.ok(responseList);
-//	}
-//
-//	private ListResponse<nBoardVO> createListResponse(List<nBoardVO> list, SearchCriteria cri) {
-//		PageMaker pageMaker = new PageMaker();
-//
-//		if (cri != null) { // 만약 검색 조건이 있다면
-//			pageMaker.setCri(cri); // 페이징 정보에 검색 조건을 설정함
-//			pageMaker.setTotalCount(mapper.listSearchCount(cri)); // 검색조건을 만족하는 전체 항목 개수를 설정함
-//		} // 생성된 목록과 검색 조건을 이용하여 응답용 객체를 생성
-//		return new ListResponse<>(list, pageMaker);
-//	}
 	
 	// 게시글 페이지 리스트
 	@RequestMapping(value = "/list/{page}", method = RequestMethod.GET)

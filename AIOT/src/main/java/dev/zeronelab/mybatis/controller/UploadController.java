@@ -27,10 +27,6 @@ import dev.zeronelab.mybatis.dto.UploadResultDTO;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
 
-/**
- * Handles requests for the application home page.
- */
-
 @RestController
 @Log4j2
 public class UploadController {
@@ -38,6 +34,8 @@ public class UploadController {
     @Value("${dev.zeronelab.upload.path}")
     private String uploadPath;
 
+    
+    // 첨부파일 업로드
     @PostMapping("/uploadAjax")
     public ResponseEntity<List<UploadResultDTO>> uploadFile(MultipartFile[] uploadFiles){
 
@@ -86,7 +84,6 @@ public class UploadController {
         return new ResponseEntity<>(resultDTOList, HttpStatus.OK);
     }
 
-
     private String makeFolder() {
 
         String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
@@ -101,34 +98,9 @@ public class UploadController {
         }
         return folderPath;
     }
-
-//    @GetMapping("/display")
-//    public ResponseEntity<byte[]> getFile(String fileName) {
-//
-//        ResponseEntity<byte[]> result = null;
-//
-//        try {
-//            String srcFileName =  URLDecoder.decode(fileName,"UTF-8");
-//
-//            log.info("fileName: " + srcFileName);
-//
-//            File file = new File(uploadPath +File.separator+ srcFileName);
-//
-//            log.info("file: " + file);
-//
-//            HttpHeaders header = new HttpHeaders();
-//
-//            //MIME타입 처리
-//            header.add("Content-Type", Files.probeContentType(file.toPath()));
-//            //파일 데이터 처리
-//            result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//        return result;
-//    }
-
+    
+    
+    // 첨부파일 삭제
     @PostMapping("/removeFile")
     public ResponseEntity<Boolean> removeFile(String fileName){
 
@@ -151,6 +123,7 @@ public class UploadController {
 
     }
 
+    //썸네일
     @GetMapping("/display")
     public ResponseEntity<byte[]> getFile(String fileName, String size) {
 

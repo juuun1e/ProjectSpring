@@ -5,6 +5,7 @@ GRANT CONNECT, RESOURCE TO AIOT;
 
 
 --member테이블 생성
+drop table member;
 CREATE TABLE MEMBER (
     memNo NUMBER PRIMARY KEY,
     memId VARCHAR2(100) NOT NULL UNIQUE,
@@ -16,9 +17,11 @@ CREATE TABLE MEMBER (
     limittime VARCHAR2(100)
 );
 
+drop SEQUENCE memNo_seq;
 CREATE SEQUENCE memNo_seq
 START WITH 1 INCREMENT BY 1  NOMAXVALUE  NOCYCLE;
 
+drop TRIGGER memNo_trigger;
 CREATE OR REPLACE TRIGGER memNo_trigger
 BEFORE INSERT ON MEMBER
 FOR EACH ROW
@@ -36,9 +39,7 @@ SELECT * FROM MEMBER;
 
 
 -- 차량등록 테이블
-CREATE SEQUENCE cNo_seq
-START WITH 1 INCREMENT BY 1  NOMAXVALUE  NOCYCLE;
-
+drop table carRegi;
 CREATE TABLE carRegi (
     carNo NUMBER PRIMARY KEY, -- 차량ID
     carNum VARCHAR2(20) NOT NULL, --차량번호
@@ -51,6 +52,11 @@ CREATE TABLE carRegi (
     CONSTRAINT unique_carNum UNIQUE (carNum) -- 차량번호 중복등록 금지
 );
 
+drop SEQUENCE cNo_seq;
+CREATE SEQUENCE cNo_seq
+START WITH 1 INCREMENT BY 1  NOMAXVALUE  NOCYCLE;
+
+drop TRIGGER aNo_trigger;
 CREATE OR REPLACE TRIGGER cNo_trigger
 BEFORE INSERT ON carRegi
 FOR EACH ROW
@@ -69,9 +75,7 @@ SELECT * FROM  carRegi;
 
 
 --게시판
-CREATE SEQUENCE bNo_seq
-START WITH 1 INCREMENT BY 1  NOMAXVALUE  NOCYCLE;
-
+drop table nBoard;
 CREATE table nBoard (
  bNo number PRIMARY KEY, 
  writer varchar2(100) , 
@@ -82,6 +86,11 @@ CREATE table nBoard (
  regidate  TIMESTAMP DEFAULT SYSTIMESTAMP
 );
 
+drop SEQUENCE bNo_seq;
+CREATE SEQUENCE bNo_seq
+START WITH 1 INCREMENT BY 1  NOMAXVALUE  NOCYCLE;
+
+drop TRIGGER aNo_trigger;
 CREATE OR REPLACE TRIGGER bNo_trigger
 BEFORE INSERT ON nBoard
 FOR EACH ROW
@@ -97,6 +106,7 @@ COMMIT;
 
 
 --댓글
+drop table nReply;
 CREATE table nReply (
  rNo number  primary KEY,
  bNo number,
@@ -112,12 +122,14 @@ FOREIGN KEY (bNo)
 REFERENCES nBoard(bNo)
 ON DELETE CASCADE;
 
-CREATE SEQUENCE nReplySeq
+drop SEQUENCE rNo_seq;
+CREATE SEQUENCE rNo_Seq
   START WITH 1
   INCREMENT BY 1
   NOCACHE
   NOCYCLE;
 
+drop TRIGGER aNo_trigger;
 CREATE OR REPLACE TRIGGER rNo_trigger
 BEFORE INSERT ON nReply
 FOR EACH ROW
@@ -127,17 +139,19 @@ END;
 /
 
 INSERT INTO nReply (bNo, replyText, replyer)
-VALUES (72, '마자!! 지구를 지켜야 해!~', '하바오');
+VALUES (1, '마자!! 지구를 지켜야 해!~', '하바오');
 
 
---첨부파일
+--첨부파일(240103변경)
+drop table nAttach;
 CREATE TABLE nAttach (
-  fullName VARCHAR2(200),
+  uuid VARCHAR2(200),
+  imgName varchar2(200),
   bNo NUMBER,
   aNo NUMBER,
-  regdate TIMESTAMP DEFAULT SYSTIMESTAMP
-);
-
+  path VARCHAR2(200),
+  regdate TIMESTAMP DEFAULT SYSTIMESTAMP 
+ );
 
 ALTER TABLE nAttach
 ADD CONSTRAINT fk_bNo_nAttach
@@ -145,22 +159,26 @@ FOREIGN KEY (bNo)
 REFERENCES nBoard(bNo)
 ON DELETE CASCADE;
 
+drop SEQUENCE aNo_seq;
 CREATE SEQUENCE aNo_seq
   START WITH 1
   INCREMENT BY 1
   NOCACHE
   NOCYCLE;
 
-
+drop TRIGGER aNo_trigger;
 CREATE OR REPLACE TRIGGER aNo_trigger
-BEFORE INSERT ON nReply
+BEFORE INSERT ON nAttach
 FOR EACH ROW
 BEGIN
-    SELECT nReplySeq.NEXTVAL INTO :new.rNo FROM dual;
+    SELECT aNo_Seq.NEXTVAL INTO :new.aNo FROM dual;
 END;
 /
 
-INSERT INTO nAttach (fullname, bNo)
-	VALUES ('모아나.jpg', 21);
+SELECT bNo_seq.CURRVAL FROM dual;
+
+INSERT INTO nAttach (imgname, uuid,bNo, path)
+ VALUES ('asdasd.jsp', 'adsadsa2131',bNo_seq.CURRVAL,'24/01/02');
+-- 인서트 안될 시, Nboard 테이블에 1행 인서트한 뒤 시도해볼 것
     
 select * from nattach;

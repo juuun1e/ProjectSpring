@@ -17,7 +17,6 @@ public interface nBoardMapper {
 
 	int listSearchCount(SearchCriteria cri);
 
-	void write(nBoardVO vo);
 	Long write(nBoardVO vo);
 	
 	List<nBoardVO> read(int bNo);
