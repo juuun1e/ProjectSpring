@@ -16,6 +16,8 @@ public interface nBoardMapper {
 	List<nBoardVO> listSearch(Criteria cri);
 
 	int listSearchCount(SearchCriteria cri);
+	
+	int selectBoardListCount(SearchCriteria cri);
 
 	Long write(nBoardVO vo);
 	
@@ -28,5 +30,6 @@ public interface nBoardMapper {
 	void delete(int bNo);
 	
 	public void addAttach(String imgName,String uuid,String path)throws Exception;
+
 }
   

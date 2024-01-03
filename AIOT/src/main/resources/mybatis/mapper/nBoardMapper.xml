@@ -53,20 +53,27 @@
 
 
 	<!-- 검색 조건에 따른 게시물 수 조회 쿼리 -->
-	<select id="listSearchCount" resultType="int">
-      <![CDATA[
-    SELECT COUNT(*) FROM nBoard
-    WHERE bNo > 0
-	  ]]>
+	<select id="selectBoardListCount" resultType="int">
+		<![CDATA[
+			SELECT COUNT(*) FROM nBoard
+			WHERE bNo > 0
+		]]>
 	</select>
-
-	<select id="countPaging" resultType="int">
+	
+	<!-- 검색 조건에 따른 게시물의 총 개수를 가져오는 쿼리 -->
+	<select id="listSearchCount" resultType="int">
+   			SELECT COUNT(*) FROM nBoard
+			<include refid="search"/>
+	</select>
+	
+	
+<!-- 	<select id="countPaging" resultType="int">
  <![CDATA[
   SELECT COUNT(bNo)
         FROM nBoard
         WHERE bNo > 0 
  ]]>
-	</select>
+	</select> -->
 
 	<!-- 검색 조건 SQL -->
 	<sql id="search">

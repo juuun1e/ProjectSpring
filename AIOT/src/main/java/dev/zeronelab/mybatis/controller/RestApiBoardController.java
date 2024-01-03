@@ -52,16 +52,18 @@ public class RestApiBoardController {
 	        List<nBoardVO> list;
 	        
 	        // 검색 조건이 있는 경우와 없는 경우를 구분하여 데이터를 가져옴
+	        int boardCount;
 	        if (cri.hasSearchCondition()) {
 	            // 검색 조건이 있는 경우
 	            list = mapper.listSearch(cri);
-	            pageMaker.setTotalCount(mapper.listSearchCount(cri));
+	            boardCount = mapper.listSearchCount(cri);
 	        } else {
 	            // 검색 조건이 없는 경우
 	            list = mapper.selectBoardList(cri);
-	            int boardCount = mapper.listSearchCount(cri);
-	            pageMaker.setTotalCount(boardCount);
+	            boardCount = mapper.selectBoardListCount(cri);
+	           
 	        }
+	        pageMaker.setTotalCount(boardCount);
 	        
 	        map.put("list", list);
 	        map.put("pageMaker", pageMaker);
