@@ -90,8 +90,8 @@
 	<!-- 글 작성 -->
 	<insert id="write">
 		<![CDATA[
-		insert into nBoard (writer, title, content, viewCnt, replyCnt, regidate)
-		values(#{writer}, #{title}, #{content}, #{viewCnt}, #{replyCnt}, SYSDATE)
+		insert into nBoard (writer, title, content, viewCnt, replyCnt ,regidate)
+		values(#{writer}, #{title}, #{content}, #{viewCnt}, #{replyCnt},SYSDATE)
 		]]>
 	</insert>
 
@@ -100,12 +100,13 @@
 	<select id="read" resultType="dev.zeronelab.mybatis.vo.nBoardVO">
 		select *
 		from nBoard
-		where bNo = #{bNo}
+		where bNo =
+		#{bNo}
 	</select>
 
 	<!-- 글 삭제 -->
 	<delete id="delete">
-		delete 
+		delete
 		from nBoard
 		where bNo = #{bNo}
 	</delete>
@@ -116,7 +117,7 @@
     where bNo = #{bNo}
     ]]>
 	</update>
-	
+
 	<update id="update" parameterType="map">
 		<![CDATA[
 		update nBoard
@@ -124,5 +125,10 @@
 		where bNo = #{bNo}
 		]]>
 	</update>
-	
+	<insert id="addAttach">
+<![CDATA[
+INSERT INTO nAttach (imgName, uuid, path,  bNo, aNo, regdate)
+VALUES (#{imgName}, #{uuid}, #{path}, #{bNo}, aNo_seq.NEXTVAL, SYSDATE)
+]]>
+	</insert>
 </mapper>
