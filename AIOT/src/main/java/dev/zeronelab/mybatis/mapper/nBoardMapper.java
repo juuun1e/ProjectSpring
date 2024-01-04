@@ -17,6 +17,8 @@ public interface nBoardMapper {
 	List<nBoardVO> listSearch(Criteria cri);
 
 	int listSearchCount(SearchCriteria cri);
+	
+	int selectBoardListCount(SearchCriteria cri);
 
 	void write(nBoardDTO vo);
 	
@@ -32,6 +34,7 @@ public interface nBoardMapper {
 	
 	public List<String> getAttach(Integer bNo)throws Exception;
 	
+
 	public void replaceAttach(String imgName,String uuid,String path,Integer bNo)throws Exception;
 	
 	public void deleteAttach(Integer bNo)throws Exception;
