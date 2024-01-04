@@ -1,7 +1,6 @@
 package dev.zeronelab.mybatis.controller;
 
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
 
@@ -79,6 +78,7 @@ public class RestApiBoardController {
 
 	
 	// 게시글 읽기
+	/*
 	@RequestMapping(value = "/read", method = RequestMethod.POST)
 	public List<nBoardVO> read(@RequestBody Map<String, Integer> request) throws Exception {
 		logger.info("read post ...........");
@@ -86,15 +86,29 @@ public class RestApiBoardController {
 		// bNo를 사용하여 필요한 작업 수행
 		mapper.updateCounts(bNo);
 		List<nBoardVO> list = mapper.read(bNo);
-
+	
+		return list;
+	}
+*/
+	@RequestMapping(value = "/read", method = RequestMethod.POST)
+	public List<nBoardDTO> read(@RequestBody Map<String, Integer> request) throws Exception {
+		logger.info("read post ...........");
+		int bNo = request.get("bNo");
+		// bNo를 사용하여 필요한 작업 수행
+		mapper.updateCounts(bNo);
+		List<nBoardDTO> list = mapper.read(bNo);
+		
 		return list;
 	}
 
+
+
+
 	
-	
+	/*
 	//게시글 작성
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String writePOST(nBoardDTO nBoardDTO, nBoardVO vo) throws Exception {
+	public String writePOST( nBoardDTO nBoardDTO, nBoardVO vo) throws Exception {
 	    System.out.println("nBoardDTO: " + nBoardDTO);
 
 	    // MovieDTO 생성
@@ -111,6 +125,28 @@ public class RestApiBoardController {
 	          	           
 	            // mapper에 fileName, uuid, path 등을 활용한 로직 추가
 	            mapper.addAttach(imgName,uuid,path);
+	        }
+	    }
+	    return "succ";
+	}*/
+
+	@RequestMapping(value = "/write", method = RequestMethod.POST)
+	public String writePOST(@RequestBody nBoardDTO nBoardDTO) throws Exception {
+	    System.out.println("nBoardDTO: " + nBoardDTO);
+
+	    // MovieDTO 생성
+	    mapper.write(nBoardDTO);
+
+	    List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
+
+	    if (imageDTOList != null && !imageDTOList.isEmpty()) {
+	        for (nBoardImageDTO imageDTO : imageDTOList) {
+	            String imgName = imageDTO.getImgName();
+	            String uuid = imageDTO.getUuid();
+	            String path = imageDTO.getPath();
+
+	            // mapper에 fileName, uuid, path 등을 활용한 로직 추가
+	            mapper.addAttach(imgName, uuid, path);
 	        }
 	    }
 	    return "succ";
@@ -179,11 +215,11 @@ public class RestApiBoardController {
 
 		return "succ";
 	}
-	/*
+	
 		@RequestMapping("/getAttach/{bNo}")
 		  @ResponseBody
 		  public List<String> getAttach(@PathVariable("bNo")Integer bNo)throws Exception{
 		    
 		    return mapper.getAttach(bNo);
-		  }  */
+		  }  
 }

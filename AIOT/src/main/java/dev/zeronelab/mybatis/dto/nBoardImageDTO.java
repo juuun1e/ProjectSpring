@@ -1,13 +1,13 @@
 package dev.zeronelab.mybatis.dto;
 
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +20,7 @@ public class nBoardImageDTO {
     private String imgName;
 
     private String path;
+
 
     public String getImageURL(){
         try {
@@ -37,5 +38,10 @@ public class nBoardImageDTO {
         }
         return "";
     }
+   
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
 

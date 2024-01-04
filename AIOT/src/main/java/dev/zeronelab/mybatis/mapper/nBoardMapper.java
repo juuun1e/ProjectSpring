@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import dev.zeronelab.mybatis.dto.nBoardDTO;
 import dev.zeronelab.mybatis.vo.Criteria;
 import dev.zeronelab.mybatis.vo.SearchCriteria;
 import dev.zeronelab.mybatis.vo.nBoardVO;
@@ -17,9 +18,9 @@ public interface nBoardMapper {
 
 	int listSearchCount(SearchCriteria cri);
 
-	Long write(nBoardVO vo);
+	void write(nBoardDTO vo);
 	
-	List<nBoardVO> read(int bNo);
+	List<nBoardDTO> read(int bNo);
 	
 	void updateCounts(Integer bNo);
 	
@@ -29,7 +30,7 @@ public interface nBoardMapper {
 	
 	public void addAttach(String imgName,String uuid,String path)throws Exception;
 	
-	// public List<String> getAttach(@Param("bNo")Integer bNo)throws Exception;
+	public List<String> getAttach(Integer bNo)throws Exception;
 	
 	public void replaceAttach(String imgName,String uuid,String path,Integer bNo)throws Exception;
 	

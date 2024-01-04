@@ -110,11 +110,11 @@
 
 
 	<!-- 글 조회 -->
-	<select id="read" resultType="dev.zeronelab.mybatis.vo.nBoardVO">
-		select *
-		from nBoard
-		where bNo =
-		#{bNo}
+	<select id="read" resultType="dev.zeronelab.mybatis.dto.nBoardDTO">
+		SELECT *
+FROM nBoard
+LEFT JOIN nAttach ON nBoard.bNo = nAttach.bNo
+WHERE nBoard.bNo = #{bNo}
 	</select>
 
 	<!-- 글 삭제 -->
@@ -150,11 +150,14 @@
 	]]>
 	</insert>
 	
-	<!-- <select id="getAttach" resultType="string" >
+	 <select id="getAttach" resultType="string" >
 	<![CDATA[
-		select imgName from nAttach where bNo = #{bNo} order by regdate
+		SELECT path || '/s_' || uuid || '_' || imgName AS combinedString
+FROM nAttach
+WHERE bNo = 30
+ORDER BY regdate
 			]]>
-	</select> -->
+	</select> 
 	
 	<insert id="replaceAttach">
 <![CDATA[
@@ -164,7 +167,9 @@
 	</insert>
 	
 	<delete id="deleteAttach">
+	<![CDATA[
 delete from nAttach where bNo = #{bNo}
+]]>
 </delete>
 
 </mapper>
