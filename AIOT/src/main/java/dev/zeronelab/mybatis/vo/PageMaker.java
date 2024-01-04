@@ -25,7 +25,7 @@ public class PageMaker {
 
 	public void setTotalCount(int totalCount) {
 		this.totalCount = totalCount;
-		System.out.println("totalCount: " + totalCount);
+		//System.out.println("totalCount: " + totalCount);
 		calcData();
 	}
 
@@ -35,8 +35,8 @@ public class PageMaker {
 		startPage = (endPage - displayPageNum) + 1;
 
 		int tempEndPage = (int) (Math.ceil(totalCount / (double) cri.getPerPageNum()));
-		System.out.println("endPage: " + endPage);
-		System.out.println("tempEndPage: " + tempEndPage);
+		//System.out.println("endPage: " + endPage);
+		//System.out.println("tempEndPage: " + tempEndPage);
 
 		if (endPage > tempEndPage) {
 			endPage = tempEndPage;
@@ -46,7 +46,7 @@ public class PageMaker {
 		next = endPage * cri.getPerPageNum() >= totalCount ? false : true;
 
 		totalPage = (int) Math.ceil((double) totalCount / cri.getPerPageNum());
-		System.out.println("totalPage: " + totalPage);
+		//System.out.println("totalPage: " + totalPage);
 	}
 
 	public int getTotalCount() {

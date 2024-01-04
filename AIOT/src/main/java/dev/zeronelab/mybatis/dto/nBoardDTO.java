@@ -33,5 +33,6 @@ public class nBoardDTO {
     
     private Date regidate;
 
+    private 
 
 }
