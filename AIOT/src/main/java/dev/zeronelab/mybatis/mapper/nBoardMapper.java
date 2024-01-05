@@ -2,10 +2,15 @@ package dev.zeronelab.mybatis.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 
 import dev.zeronelab.mybatis.dto.nBoardDTO;
+import dev.zeronelab.mybatis.dto.nBoardImageDTO;
 import dev.zeronelab.mybatis.vo.Criteria;
 import dev.zeronelab.mybatis.vo.SearchCriteria;
 import dev.zeronelab.mybatis.vo.nBoardVO;
@@ -17,26 +22,28 @@ public interface nBoardMapper {
 	List<nBoardVO> listSearch(Criteria cri);
 
 	int listSearchCount(SearchCriteria cri);
-	
+
 	int selectBoardListCount(SearchCriteria cri);
 
 	void write(nBoardDTO vo);
-	
-	List<nBoardDTO> read(int bNo);
-	
+
+	// List<nBoardVO> read(int bNo);
+
+	nBoardDTO read(int bNo);
+
 	void updateCounts(Integer bNo);
-	
+
 	void update(@Param("title") String title, @Param("content") String content, @Param("bNo") Integer bNo);
 
 	void delete(int bNo);
-	
-	public void addAttach(String imgName,String uuid,String path)throws Exception;
-	
-	public List<String> getAttach(Integer bNo)throws Exception;
-	
 
-	public void replaceAttach(String imgName,String uuid,String path,Integer bNo)throws Exception;
-	
-	public void deleteAttach(Integer bNo)throws Exception;
+	public void addAttach(@Param("imgName") String imgName, @Param("uuid") String uuid, @Param("path") String path)
+			throws Exception;
+
+	public void replaceAttach(String imgName, String uuid, String path, Integer bNo) throws Exception;
+
+	public void deleteAttach(Integer bNo) throws Exception;
+
+	List<nBoardImageDTO> getImageDTOList(int bNo);
+
 }
-  

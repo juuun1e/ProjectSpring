@@ -35,7 +35,8 @@
 		resultType="dev.zeronelab.mybatis.vo.nBoardVO">
 		SELECT * FROM (
 		SELECT
-		bNo, title, content, writer, regidate, viewCnt, replyCnt,
+		bNo, title, content, writer, regidate, viewCnt,
+		replyCnt,
 		ROW_NUMBER() OVER (ORDER BY bNo DESC, regidate DESC) AS rnum
 		FROM
 		nBoard
@@ -51,15 +52,18 @@
 			AND (writer LIKE '%' || #{keyword} || '%')
 		</if>
 		<if test="searchType == 'tc'.toString()">
-			AND (title LIKE '%' || #{keyword} || '%' OR content LIKE '%' ||
+			AND (title LIKE '%' || #{keyword} || '%' OR content LIKE
+			'%' ||
 			#{keyword} || '%')
 		</if>
 		<if test="searchType == 'cw'.toString()">
-			AND (content LIKE '%' || #{keyword} || '%' OR writer LIKE '%' ||
+			AND (content LIKE '%' || #{keyword} || '%' OR writer LIKE
+			'%' ||
 			#{keyword} || '%')
 		</if>
 		<if test="searchType == 'tcw'.toString()">
-			AND (title LIKE '%' || #{keyword} || '%' OR content LIKE '%' ||
+			AND (title LIKE '%' || #{keyword} || '%' OR content LIKE
+			'%' ||
 			#{keyword} || '%' OR writer LIKE '%' || #{keyword} || '%')
 		</if>
 		)
@@ -133,8 +137,7 @@
 		resultType="dev.zeronelab.mybatis.dto.nBoardDTO">
 		SELECT *
 		FROM nBoard
-		LEFT JOIN nAttach ON nBoard.bNo = nAttach.bNo
-		WHERE nBoard.bNo = #{bNo}
+		WHERE bNo = #{bNo}
 	</select>
 
 
@@ -174,12 +177,12 @@
 	]]>
 	</insert>
 
-	<select id="getAttach" resultType="string">
+
+	<select id="getImageDTOList"
+		resultType="dev.zeronelab.mybatis.dto.nBoardImageDTO">
 	<![CDATA[
-		SELECT path || '/s_' || uuid || '_' || imgName AS combinedString
-FROM nAttach
-WHERE bNo = 30
-ORDER BY regdate
+		select imgName,uuid,path 
+		from nAttach where bNo = #{bNo} order by regdate
 			]]>
 	</select>
 

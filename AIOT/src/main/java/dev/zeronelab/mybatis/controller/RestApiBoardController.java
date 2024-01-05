@@ -1,8 +1,10 @@
 package dev.zeronelab.mybatis.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.zeronelab.mybatis.dto.nBoardDTO;
@@ -32,180 +33,163 @@ public class RestApiBoardController {
 
 	@Autowired
 	private nBoardMapper mapper;
-	
+
 	// 게시글 페이지 리스트
 	@RequestMapping(value = "/list/{page}", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> boardListPage(@PathVariable("page") Integer page,
-		   @ModelAttribute(value = "cri") SearchCriteria cri) {
-	    ResponseEntity<Map<String, Object>> entity = null;
+			@ModelAttribute(value = "cri") SearchCriteria cri) {
+		ResponseEntity<Map<String, Object>> entity = null;
 
-	    try {// 검색 조건이 없으면 새로운 SearchCriteria 객체를 생성하여 사용
-	    	  if (cri == null) {
-	              cri = new SearchCriteria();
-	         }
-	          cri.setPage(page);
+		try {// 검색 조건이 없으면 새로운 SearchCriteria 객체를 생성하여 사용
+			if (cri == null) {
+				cri = new SearchCriteria();
+			}
+			cri.setPage(page);
 
-	        PageMaker pageMaker = new PageMaker();
-	        pageMaker.setCri(cri);
+			PageMaker pageMaker = new PageMaker();
+			pageMaker.setCri(cri);
 
-	        Map<String, Object> map = new HashMap<>();
-	        List<nBoardVO> list;
-	        
-	        // 검색 조건이 있는 경우와 없는 경우를 구분하여 데이터를 가져옴
-	        int boardCount;
-	        if (cri.hasSearchCondition()) {
-	            // 검색 조건이 있는 경우
-	            list = mapper.listSearch(cri);
-	            boardCount = mapper.listSearchCount(cri);
-	        } else {
-	            // 검색 조건이 없는 경우
-	            list = mapper.selectBoardList(cri);
-	            boardCount = mapper.selectBoardListCount(cri);
-	           
-	        }
-	        pageMaker.setTotalCount(boardCount);
-	        
-	        map.put("list", list);
-	        map.put("pageMaker", pageMaker);
+			Map<String, Object> map = new HashMap<>();
+			List<nBoardVO> list;
 
-	        entity = new ResponseEntity<>(map, HttpStatus.OK);
+			// 검색 조건이 있는 경우와 없는 경우를 구분하여 데이터를 가져옴
+			int boardCount;
+			if (cri.hasSearchCondition()) {
+				// 검색 조건이 있는 경우
+				list = mapper.listSearch(cri);
+				boardCount = mapper.listSearchCount(cri);
+			} else {
+				// 검색 조건이 없는 경우
+				list = mapper.selectBoardList(cri);
+				boardCount = mapper.selectBoardListCount(cri);
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	    }
-	    return entity;
+			}
+			pageMaker.setTotalCount(boardCount);
+
+			map.put("list", list);
+			map.put("pageMaker", pageMaker);
+
+			entity = new ResponseEntity<>(map, HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return entity;
 	}
 
-
-	
 	// 게시글 읽기
-	/*
-	@RequestMapping(value = "/read", method = RequestMethod.POST)
+	
+/*	@RequestMapping(value = "/read", method = RequestMethod.POST)
 	public List<nBoardVO> read(@RequestBody Map<String, Integer> request) throws Exception {
 		logger.info("read post ...........");
-		int bNo = request.get("bNo");
-		// bNo를 사용하여 필요한 작업 수행
+		int bNo = request.get("bNo"); 
 		mapper.updateCounts(bNo);
 		List<nBoardVO> list = mapper.read(bNo);
-	
+
 		return list;
-	}
-*/
-	@RequestMapping(value = "/read", method = RequestMethod.POST)
-	public List<nBoardDTO> read(@RequestBody Map<String, Integer> request) throws Exception {
-		logger.info("read post ...........");
-		int bNo = request.get("bNo");
-		// bNo를 사용하여 필요한 작업 수행
-		mapper.updateCounts(bNo);
-		List<nBoardDTO> list = mapper.read(bNo);
-		
-		return list;
-	}
-
-
-
-
-	
-	/*
-	//게시글 작성
-	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String writePOST( nBoardDTO nBoardDTO, nBoardVO vo) throws Exception {
-	    System.out.println("nBoardDTO: " + nBoardDTO);
-
-	    // MovieDTO 생성
-	    mapper.write(vo);
-
-	    List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
-
-	    if (imageDTOList != null && !imageDTOList.isEmpty()) {
-	        for (nBoardImageDTO imageDTO : imageDTOList) {
-	            String imgName = imageDTO.getImgName();
-	            String uuid = imageDTO.getUuid();
-	            String path = imageDTO.getPath();
-	            
-	          	           
-	            // mapper에 fileName, uuid, path 등을 활용한 로직 추가
-	            mapper.addAttach(imgName,uuid,path);
-	        }
-	    }
-	    return "succ";
 	}*/
+	 
+	 @RequestMapping(value = "/read", method = RequestMethod.POST)
+	    public nBoardDTO read(@RequestBody Map<String, Integer> request) throws Exception {
+	        int bNo = request.get("bNo");
+
+	        // 필요한 작업 수행
+	        mapper.updateCounts(bNo);
+
+	        // 게시글 정보 가져오기
+	        nBoardDTO nb = mapper.read(bNo);
+
+	        // 이미지 정보 가져오기
+	        List<nBoardImageDTO> imageDTOList = getImageDTOList(bNo);
+	        System.out.println("/*** imageDTOList="+imageDTOList.toString());
+	        
+	        nb.setImageDTOList(imageDTOList);
+
+	        return nb;
+	    }
+
+	    private List<nBoardImageDTO> getImageDTOList(int bNo) {
+	        return mapper.getImageDTOList(bNo); // YourMapper에서 실제로 이미지 정보를 조회하는 메서드를 호출하도록 변경
+	    }
+	
+
+	// 게시글 작성
 
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public String writePOST(@RequestBody nBoardDTO nBoardDTO) throws Exception {
-	    System.out.println("nBoardDTO: " + nBoardDTO);
+		System.out.println("nBoardDTO: " + nBoardDTO);
 
-	    // MovieDTO 생성
-	    mapper.write(nBoardDTO);
+		// nBoardDTO 생성
+		mapper.write(nBoardDTO);
 
-	    List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
+		List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
 
-	    if (imageDTOList != null && !imageDTOList.isEmpty()) {
-	        for (nBoardImageDTO imageDTO : imageDTOList) {
-	            String imgName = imageDTO.getImgName();
-	            String uuid = imageDTO.getUuid();
-	            String path = imageDTO.getPath();
+		if (imageDTOList != null && !imageDTOList.isEmpty()) {
+			for (nBoardImageDTO imageDTO : imageDTOList) {
+				String imgName = imageDTO.getImgName();
+				String uuid = imageDTO.getUuid();
+				String path = imageDTO.getPath();
 
-	            // mapper에 fileName, uuid, path 등을 활용한 로직 추가
-	            mapper.addAttach(imgName, uuid, path);
-	        }
-	    }
-	    return "succ";
+				// mapper에 fileName, uuid, path 등을 활용한 로직 추가
+				mapper.addAttach(imgName, uuid, path);
+			}
+		}
+		return "succ";
 	}
-
 
 	// 게시글 수정
 	/*
+	 * @RequestMapping(value = "/modify", method = RequestMethod.POST) public String
+	 * modify(@RequestBody Map<String, Object> requestBody) throws Exception {
+	 * logger.info("modifyPagingpost...........");
+	 * 
+	 * // Extracting the post number, title, and content from the request body sent
+	 * by the client Integer bNo = (Integer) requestBody.get("bNo"); String title =
+	 * (String) requestBody.get("title"); String content = (String)
+	 * requestBody.get("content");
+	 * 
+	 * logger.info("Post number is used: " + bNo);
+	 * 
+	 * // Calling the update method of MyBatis using the extracted values
+	 * mapper.update(title, content, bNo);
+	 * 
+	 * return "success"; }
+	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public String modify(@RequestBody Map<String, Object> requestBody) throws Exception {
-	    logger.info("modifyPagingpost...........");
+	public String modify(@RequestBody Map<String, Object> requestBody, @RequestBody nBoardDTO nBoardDTO)
+			throws Exception {
+		logger.info("modifyPagingpost...........");
 
-	    // Extracting the post number, title, and content from the request body sent by the client
-	    Integer bNo = (Integer) requestBody.get("bNo");
-	    String title = (String) requestBody.get("title");
-	    String content = (String) requestBody.get("content");
+		// Extracting the post number, title, and content from the request body sent by
+		// the client
+		Integer bNo = (Integer) requestBody.get("bNo");
+		String title = (String) requestBody.get("title");
+		String content = (String) requestBody.get("content");
 
-	    logger.info("Post number is used: " + bNo);
+		logger.info("Post number is used: " + bNo);
 
-	    // Calling the update method of MyBatis using the extracted values
-	    mapper.update(title, content, bNo);
+		// Calling the update method of MyBatis using the extracted values
+		mapper.update(title, content, bNo);
 
-	    return "success";
-	}*/
-	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public String modify(@RequestBody Map<String, Object> requestBody,nBoardDTO nBoardDTO) throws Exception {
-	    logger.info("modifyPagingpost...........");
+		mapper.deleteAttach(bNo);
 
-	    // Extracting the post number, title, and content from the request body sent by the client
-	    Integer bNo = (Integer) requestBody.get("bNo");
-	    String title = (String) requestBody.get("title");
-	    String content = (String) requestBody.get("content");
+		List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
 
-	    logger.info("Post number is used: " + bNo);
+		if (imageDTOList != null && !imageDTOList.isEmpty()) {
+			for (nBoardImageDTO imageDTO : imageDTOList) {
+				String imgName = imageDTO.getImgName();
+				String uuid = imageDTO.getUuid();
+				String path = imageDTO.getPath();
 
-	    // Calling the update method of MyBatis using the extracted values
-	    mapper.update(title, content, bNo);
-	    
-	    mapper.deleteAttach(bNo);
-	    
-	    List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
-
-	    if (imageDTOList != null && !imageDTOList.isEmpty()) {
-	        for (nBoardImageDTO imageDTO : imageDTOList) {
-	            String imgName = imageDTO.getImgName();
-	            String uuid = imageDTO.getUuid();
-	            String path = imageDTO.getPath();
-	            
-	          	           
-	            // mapper에 fileName, uuid, path 등을 활용한 로직 추가
-	            mapper.replaceAttach(imgName,uuid,path,bNo);
-	        }
-	    }
-	    return "succ";
+				// mapper에 fileName, uuid, path 등을 활용한 로직 추가
+				mapper.replaceAttach(imgName, uuid, path, bNo);
+			}
+		}
+		return "succ";
 
 	}
-	
+
 	// 게시글 삭제
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public String delete(@RequestBody Map<String, Integer> request) throws Exception {
@@ -218,10 +202,4 @@ public class RestApiBoardController {
 		return "succ";
 	}
 	
-		@RequestMapping("/getAttach/{bNo}")
-		  @ResponseBody
-		  public List<String> getAttach(@PathVariable("bNo")Integer bNo)throws Exception{
-		    
-		    return mapper.getAttach(bNo);
-		  }  
 }
