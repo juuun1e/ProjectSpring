@@ -79,39 +79,40 @@ public class RestApiBoardController {
 	}
 
 	// 게시글 읽기
-
-	/*
-	 * @RequestMapping(value = "/read", method = RequestMethod.POST) public
-	 * List<nBoardVO> read(@RequestBody Map<String, Integer> request) throws
-	 * Exception { logger.info("read post ..........."); int bNo =
-	 * request.get("bNo"); mapper.updateCounts(bNo); List<nBoardVO> list =
-	 * mapper.read(bNo);
-	 * 
-	 * return list; }
-	 */
-
-	@RequestMapping(value = "/read", method = RequestMethod.POST)
-	public nBoardDTO read(@RequestBody Map<String, Integer> request) throws Exception {
-		int bNo = request.get("bNo");
-
-		// 필요한 작업 수행
+	
+/*	@RequestMapping(value = "/read", method = RequestMethod.POST)
+	public List<nBoardVO> read(@RequestBody Map<String, Integer> request) throws Exception {
+		logger.info("read post ...........");
+		int bNo = request.get("bNo"); 
 		mapper.updateCounts(bNo);
+		List<nBoardVO> list = mapper.read(bNo);
 
-		// 게시글 정보 가져오기
-		nBoardDTO nb = mapper.read(bNo);
+		return list;
+	}*/
+	 
+	 @RequestMapping(value = "/read", method = RequestMethod.POST)
+	    public nBoardDTO read(@RequestBody Map<String, Integer> request) throws Exception {
+	        int bNo = request.get("bNo");
 
-		// 이미지 정보 가져오기
-		List<nBoardImageDTO> imageDTOList = getImageDTOList(bNo);
-		System.out.println("/*** imageDTOList=" + imageDTOList.toString());
+	        // 필요한 작업 수행
+	        mapper.updateCounts(bNo);
 
-		nb.setImageDTOList(imageDTOList);
+	        // 게시글 정보 가져오기
+	        nBoardDTO nb = mapper.read(bNo);
 
-		return nb;
-	}
+	        // 이미지 정보 가져오기
+	        List<nBoardImageDTO> imageDTOList = getImageDTOList(bNo);
+	        System.out.println("/*** imageDTOList="+imageDTOList.toString());
+	        
+	        nb.setImageDTOList(imageDTOList);
 
-	private List<nBoardImageDTO> getImageDTOList(int bNo) {
-		return mapper.getImageDTOList(bNo); // YourMapper에서 실제로 이미지 정보를 조회하는 메서드를 호출하도록 변경
-	}
+	        return nb;
+	    }
+
+	    private List<nBoardImageDTO> getImageDTOList(int bNo) {
+	        return mapper.getImageDTOList(bNo); // YourMapper에서 실제로 이미지 정보를 조회하는 메서드를 호출하도록 변경
+	    }
+	
 
 	// 게시글 작성
 
@@ -140,12 +141,12 @@ public class RestApiBoardController {
 	// 게시글 수정
 	/*
 	 * @RequestMapping(value = "/modify", method = RequestMethod.POST) public String
-	 * modify(@RequestBody Map<String, Object> requestBody, nBoardDTO nBoardDTO)
-	 * throws Exception { logger.info("modifyPagingpost...........");
+	 * modify(@RequestBody Map<String, Object> requestBody) throws Exception {
+	 * logger.info("modifyPagingpost...........");
 	 * 
-	 * // Extracting the post number, title, and content from the request body
-	 * sentby // the client Integer bNo = (Integer) requestBody.get("bNo"); String
-	 * title = (String) requestBody.get("title"); String content = (String)
+	 * // Extracting the post number, title, and content from the request body sent
+	 * by the client Integer bNo = (Integer) requestBody.get("bNo"); String title =
+	 * (String) requestBody.get("title"); String content = (String)
 	 * requestBody.get("content");
 	 * 
 	 * logger.info("Post number is used: " + bNo);
@@ -153,61 +154,40 @@ public class RestApiBoardController {
 	 * // Calling the update method of MyBatis using the extracted values
 	 * mapper.update(title, content, bNo);
 	 * 
-	 * mapper.deleteAttach(bNo);
-	 * 
-	 * List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
-	 * 
-	 * if (imageDTOList != null && !imageDTOList.isEmpty()) { for (nBoardImageDTO
-	 * imageDTO : imageDTOList) { String imgName = imageDTO.getImgName(); String
-	 * uuid = imageDTO.getUuid(); String path = imageDTO.getPath();
-	 * 
-	 * // mapper에 fileName, uuid, path 등을 활용한 로직 추가 mapper.replaceAttach(imgName,
-	 * uuid, path, bNo); } } return "succ";
-	 * 
-	 * }
+	 * return "success"; }
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public String modify(@RequestBody Map<String, Object> requestBody) throws Exception {
+	public String modify(@RequestBody Map<String, Object> requestBody, @RequestBody nBoardDTO nBoardDTO)
+			throws Exception {
 		logger.info("modifyPagingpost...........");
 
-		// 클라이언트가 보낸 요청 본문에서 게시물 번호, 제목, 내용을 추출
+		// Extracting the post number, title, and content from the request body sent by
+		// the client
 		Integer bNo = (Integer) requestBody.get("bNo");
 		String title = (String) requestBody.get("title");
 		String content = (String) requestBody.get("content");
 
-		logger.info("게시물 번호를 사용: " + bNo);
+		logger.info("Post number is used: " + bNo);
 
-		// MyBatis의 update 메서드를 호출하여 추출한 값들로 게시물 업데이트
+		// Calling the update method of MyBatis using the extracted values
 		mapper.update(title, content, bNo);
 
-		// 첨부 파일 삭제
 		mapper.deleteAttach(bNo);
 
-		// 요청 본문에서 imageDTOList 추출
-		Object rawImageDTOList = requestBody.get("imageDTOList");
+		List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
 
-		if (rawImageDTOList instanceof List) {
-			List<?> imageDTOList = (List<?>) rawImageDTOList;
+		if (imageDTOList != null && !imageDTOList.isEmpty()) {
+			for (nBoardImageDTO imageDTO : imageDTOList) {
+				String imgName = imageDTO.getImgName();
+				String uuid = imageDTO.getUuid();
+				String path = imageDTO.getPath();
 
-			// 여기서 imageDTOList를 사용할 수 있음
-			for (Object imageDTO : imageDTOList) {
-				if (imageDTO instanceof Map) {
-					Map<?, ?> imageMap = (Map<?, ?>) imageDTO;
-					String imgName = (String) imageMap.get("imgName");
-					String uuid = (String) imageMap.get("uuid");
-					String path = (String) imageMap.get("path");
-
-					// mapper에 fileName, uuid, path 등을 활용한 로직 추가
-					mapper.replaceAttach(imgName, uuid, path, bNo);
-				}
+				// mapper에 fileName, uuid, path 등을 활용한 로직 추가
+				mapper.replaceAttach(imgName, uuid, path, bNo);
 			}
-		} else {
-			// 적절한 타입이 아닌 경우에 대한 처리
 		}
-
-		// 이미지 처리 완료 후 추가로 실행할 로직을 추가할 수 있습니다.
-
 		return "succ";
+
 	}
 
 	// 게시글 삭제
@@ -221,5 +201,5 @@ public class RestApiBoardController {
 
 		return "succ";
 	}
-
+	
 }
