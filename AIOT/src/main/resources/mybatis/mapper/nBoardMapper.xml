@@ -204,5 +204,11 @@
 delete from nAttach where bNo = #{bNo}
 ]]>
 	</delete>
-
+<update id="updateReplyCnt">
+ <![CDATA[
+  UPDATE nboard
+  SET replycnt = replycnt + #{amount}
+  WHERE bNo = #{bNo}
+    ]]>
+    </update>
 </mapper>

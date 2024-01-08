@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.zeronelab.mybatis.mapper.nBoardMapper;
 import dev.zeronelab.mybatis.mapper.nReplyMapper;
 import dev.zeronelab.mybatis.vo.Criteria;
 import dev.zeronelab.mybatis.vo.PageMaker;
@@ -23,21 +24,37 @@ import dev.zeronelab.mybatis.vo.nReplyVO;
 @RestController
 @RequestMapping("/api/reply")
 public class RestReplyController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(RestApiBoardController.class);
-	
+
 	@Autowired
 	private nReplyMapper mapper;
-
 	
+	@Autowired
+	private nBoardMapper Mapper;
+	
+
 	// 댓글 추가
+	/*
+	 * @RequestMapping(value = "/add", method = RequestMethod.POST) public
+	 * ResponseEntity<String> register(@RequestBody nReplyVO vo) {
+	 * logger.info("............ADD post ...........");
+	 * 
+	 * ResponseEntity<String> entity = null; try { mapper.addReply(vo); entity = new
+	 * ResponseEntity<String>("SUCCESS", HttpStatus.OK); } catch (Exception e) {
+	 * e.printStackTrace(); entity = new ResponseEntity<String>(e.getMessage(),
+	 * HttpStatus.BAD_REQUEST); } return entity; }
+	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public ResponseEntity<String> register(@RequestBody nReplyVO vo) {
+	public ResponseEntity<String> register(@RequestBody Map<String, Object> requestBody) {
 		logger.info("............ADD post ...........");
-		
+		String bNo = (String) requestBody.get("bNo");
+		String replyText = (String) requestBody.get("replyText");
+		String replyer = (String) requestBody.get("replyer");
 		ResponseEntity<String> entity = null;
 		try {
-			mapper.addReply(vo);
+			mapper.addReply(bNo, replyText, replyer);
+			Mapper.updateReplyCnt(bNo, 1);
 			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -45,7 +62,6 @@ public class RestReplyController {
 		}
 		return entity;
 	}
-	
 
 	// 댓글 리스트
 	@RequestMapping(value = "/list/{bNo}", method = RequestMethod.GET)
@@ -63,7 +79,7 @@ public class RestReplyController {
 		return entity;
 	}
 
-	//댓글 수정
+	// 댓글 수정
 	@RequestMapping(value = "/{rNo}", method = { RequestMethod.PUT, RequestMethod.PATCH })
 	public ResponseEntity<String> update(@PathVariable("rNo") Integer rNo, @RequestBody nReplyVO vo) {
 
@@ -80,7 +96,7 @@ public class RestReplyController {
 		return entity;
 	}
 
-	//댓글 삭제
+	// 댓글 삭제
 	@RequestMapping(value = "/{rNo}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> remove(@PathVariable("rNo") Integer rNo) {
 

@@ -40,10 +40,12 @@ public interface nBoardMapper {
 	public void addAttach(@Param("imgName") String imgName, @Param("uuid") String uuid, @Param("path") String path)
 			throws Exception;
 
-	public void replaceAttach(@Param("imgName")String imgName, @Param("uuid") String uuid,@Param("path") String path,@Param("bNo") String bNo) throws Exception;
+	public void replaceAttach(@Param("imgName") String imgName, @Param("uuid") String uuid, @Param("path") String path,
+			@Param("bNo") String bNo) throws Exception;
 
 	public void deleteAttach(String bNo) throws Exception;
 
 	List<nBoardImageDTO> getImageDTOList(int bNo);
 
+	public void updateReplyCnt(String bNo, int amount) throws Exception;
 }
