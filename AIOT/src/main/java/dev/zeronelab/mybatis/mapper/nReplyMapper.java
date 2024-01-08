@@ -12,7 +12,7 @@ import dev.zeronelab.mybatis.vo.nReplyVO;
 public interface nReplyMapper {
   public List<nReplyVO> list(@Param("bNo")Integer bNo) throws Exception;
 
-  public void addReply(nReplyVO vo) throws Exception;
+  public void addReply(String bNo,String replyText,String replyer) throws Exception;
 
   public void modify(nReplyVO vo) throws Exception;
 
