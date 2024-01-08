@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 댓글 작성 -->
 	<insert id="addReply">
 		INSERT INTO nReply (bNo, replyText, replyer)
-		VALUES ( #{bNo, jdbcType=NUMERIC}, #{replyText}, #{replyer})
+		VALUES ( #{bNo}, #{replyText}, #{replyer})
 	</insert>
 
 

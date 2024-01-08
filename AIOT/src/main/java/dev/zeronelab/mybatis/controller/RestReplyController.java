@@ -97,12 +97,13 @@ public class RestReplyController {
 	}
 
 	// 댓글 삭제
-	@RequestMapping(value = "/{rNo}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> remove(@PathVariable("rNo") Integer rNo) {
-
+	@RequestMapping(value = "/{rNo}/{bNo}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> remove(@PathVariable("rNo") Integer rNo,@PathVariable("bNo") String bNo)throws Exception {
+		//String bNo = mapper.getBNo(rNo);
 		ResponseEntity<String> entity = null;
 		try {
 			mapper.remove(rNo);
+			Mapper.updateReplyCnt(bNo, -1);
 			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
