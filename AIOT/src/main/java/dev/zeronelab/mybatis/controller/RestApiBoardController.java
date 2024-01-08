@@ -171,7 +171,7 @@ public class RestApiBoardController {
 		logger.info("modifyPagingpost...........");
 
 		// 클라이언트가 보낸 요청 본문에서 게시물 번호, 제목, 내용을 추출
-		Integer bNo = (Integer) requestBody.get("bNo");
+		String bNo = (String) requestBody.get("bNo");
 		String title = (String) requestBody.get("title");
 		String content = (String) requestBody.get("content");
 

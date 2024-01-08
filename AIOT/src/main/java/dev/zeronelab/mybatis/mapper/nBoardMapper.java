@@ -33,16 +33,16 @@ public interface nBoardMapper {
 
 	void updateCounts(Integer bNo);
 
-	void update(@Param("title") String title, @Param("content") String content, @Param("bNo") Integer bNo);
+	void update(@Param("title") String title, @Param("content") String content, @Param("bNo") String bNo);
 
 	void delete(int bNo);
 
 	public void addAttach(@Param("imgName") String imgName, @Param("uuid") String uuid, @Param("path") String path)
 			throws Exception;
 
-	public void replaceAttach(String imgName, String uuid, String path, Integer bNo) throws Exception;
+	public void replaceAttach(String imgName, String uuid, String path, String bNo) throws Exception;
 
-	public void deleteAttach(Integer bNo) throws Exception;
+	public void deleteAttach(String bNo) throws Exception;
 
 	List<nBoardImageDTO> getImageDTOList(int bNo);
 
