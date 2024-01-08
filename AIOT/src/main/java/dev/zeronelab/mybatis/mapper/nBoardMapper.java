@@ -47,5 +47,5 @@ public interface nBoardMapper {
 
 	List<nBoardImageDTO> getImageDTOList(int bNo);
 
-	public void updateReplyCnt(String bNo, int amount) throws Exception;
+	public void updateReplyCnt(@Param("bNo")String bNo,@Param("amount") int amount) throws Exception;
 }

@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM nReply
 		WHERE bNo =
 		#{bNo}
-		ORDER BY rNo DESC
+		ORDER BY regdate ASC
 	</select>
 
 
