@@ -40,7 +40,7 @@ public interface nBoardMapper {
 	public void addAttach(@Param("imgName") String imgName, @Param("uuid") String uuid, @Param("path") String path)
 			throws Exception;
 
-	public void replaceAttach(String imgName, String uuid, String path, String bNo) throws Exception;
+	public void replaceAttach(@Param("imgName")String imgName, @Param("uuid") String uuid,@Param("path") String path,@Param("bNo") String bNo) throws Exception;
 
 	public void deleteAttach(String bNo) throws Exception;
 
