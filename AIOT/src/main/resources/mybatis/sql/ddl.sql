@@ -5,7 +5,7 @@ GRANT CONNECT, RESOURCE TO AIOT;
 
 
 --member테이블 생성
-drop table member;
+drop table MEMBER;
 CREATE TABLE MEMBER (
     memNo NUMBER PRIMARY KEY,
     memId VARCHAR2(100) NOT NULL UNIQUE,
@@ -30,13 +30,6 @@ BEGIN
 END;
 /
 
-INSERT INTO MEMBER (memName, memNickName, memId, memPw)
-VALUES
-	('푸바오','바오','bao@naver.com','234');
-COMMIT;
-
-SELECT * FROM MEMBER;
-
 
 -- 차량등록 테이블
 drop table carRegi;
@@ -56,7 +49,7 @@ drop SEQUENCE cNo_seq;
 CREATE SEQUENCE cNo_seq
 START WITH 1 INCREMENT BY 1  NOMAXVALUE  NOCYCLE;
 
-drop TRIGGER aNo_trigger;
+drop TRIGGER cNo_trigger;
 CREATE OR REPLACE TRIGGER cNo_trigger
 BEFORE INSERT ON carRegi
 FOR EACH ROW
@@ -64,14 +57,6 @@ BEGIN
     SELECT cNo_seq.NEXTVAL INTO :new.carNo FROM dual;
 END;
 /
-
--- Add some sample data
-INSERT INTO CarRegi ( carNum, carBrand, carModel, charType, memId)
-VALUES
-    ('12가4526', 'Tesla', 'Model S', 'DC콤보', 'bao@naver.com');
-COMMIT;
-
-SELECT * FROM  carRegi;
 
 
 --게시판
@@ -90,7 +75,7 @@ drop SEQUENCE bNo_seq;
 CREATE SEQUENCE bNo_seq
 START WITH 1 INCREMENT BY 1  NOMAXVALUE  NOCYCLE;
 
-drop TRIGGER aNo_trigger;
+drop TRIGGER bNo_trigger;
 CREATE OR REPLACE TRIGGER bNo_trigger
 BEFORE INSERT ON nBoard
 FOR EACH ROW
@@ -98,11 +83,6 @@ BEGIN
     SELECT bNo_seq.NEXTVAL INTO :new.bNo FROM dual;
 END;
 /
-
-insert into nboard (writer, title, content, viewCnt, replyCnt)
-values('짠국', '물은 아껴써야 해', '북극곰이 죽고 있다구', 793, 382);
-select * from nBoard;
-COMMIT;
 
 
 --댓글
@@ -129,20 +109,17 @@ CREATE SEQUENCE rNo_Seq
   NOCACHE
   NOCYCLE;
 
-drop TRIGGER aNo_trigger;
+drop TRIGGER rNo_trigger;
 CREATE OR REPLACE TRIGGER rNo_trigger
 BEFORE INSERT ON nReply
 FOR EACH ROW
 BEGIN
-    SELECT nReplySeq.NEXTVAL INTO :new.rNo FROM dual;
+    SELECT rNo_Seq.NEXTVAL INTO :new.rNo FROM dual;
 END;
 /
 
-INSERT INTO nReply (bNo, replyText, replyer)
-VALUES (1, '마자!! 지구를 지켜야 해!~', '하바오');
 
-
---첨부파일(240103변경)
+--첨부파일
 drop table nAttach;
 CREATE TABLE nAttach (
   uuid VARCHAR2(200),
@@ -177,8 +154,4 @@ END;
 
 SELECT bNo_seq.CURRVAL FROM dual;
 
-INSERT INTO nAttach (imgname, uuid,bNo, path)
- VALUES ('asdasd.jsp', 'adsadsa2131',bNo_seq.CURRVAL,'24/01/02');
 -- 인서트 안될 시, Nboard 테이블에 1행 인서트한 뒤 시도해볼 것
-    
-select * from nattach;
