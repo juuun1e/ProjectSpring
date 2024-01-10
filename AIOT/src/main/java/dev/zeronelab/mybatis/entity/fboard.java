@@ -20,7 +20,7 @@ import lombok.ToString;
 @Table(name = "fboard")
 @ToString
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class fboard {
@@ -28,7 +28,7 @@ public class fboard {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "fno_seq")
 	@SequenceGenerator(name = "fno_seq", sequenceName = "FNO_SEQ", allocationSize = 1)
-	private int bno;
+	private long fno;
 	
 	@Column(length = 100)
 	private String writer;
