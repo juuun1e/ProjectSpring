@@ -30,14 +30,16 @@ public interface fboardRepository extends JpaRepository<fboard, Long> {
 	@Query(value = "SELECT * FROM (SELECT fno, title, content, writer, regidate, viewCnt, replyCnt, " +
 	        "ROW_NUMBER() OVER (ORDER BY fno DESC, regidate DESC) AS rnum FROM fboard " +
 	        "WHERE fno > 0 " +
-	        "<if test='cri.searchType == \"t\"'>AND (title LIKE '%' || :cri.keyword || '%') </if>" +
-	        "<if test='cri.searchType == \"c\"'>AND (content LIKE '%' || :cri.keyword || '%') </if>" +
-	        "<if test='cri.searchType == \"w\"'>AND (writer LIKE '%' || :cri.keyword || '%') </if>" +
-	        "<if test='cri.searchType == \"tc\"'>AND (title LIKE '%' || :cri.keyword || '%' OR content LIKE '%' || :cri.keyword || '%') </if>" +
-	        "<if test='cri.searchType == \"cw\"'>AND (content LIKE '%' || :cri.keyword || '%' OR writer LIKE '%' || :cri.keyword || '%') </if>" +
-	        "<if test='cri.searchType == \"tcw\"'>AND (title LIKE '%' || :cri.keyword || '%' OR content LIKE '%' || :cri.keyword || '%' OR writer LIKE '%' || :cri.keyword || '%') </if>" +
+	        "AND (:#{#cri.searchType} IS NULL OR " +
+	        "   (title LIKE '%' || :#{#cri.keyword} || '%' AND :#{#cri.searchType} = 't') OR " +
+	        "   (content LIKE '%' || :#{#cri.keyword} || '%' AND :#{#cri.searchType} = 'c') OR " +
+	        "   (writer LIKE '%' || :#{#cri.keyword} || '%' AND :#{#cri.searchType} = 'w') OR " +
+	        "   (title LIKE '%' || :#{#cri.keyword} || '%' AND content LIKE '%' || :#{#cri.keyword} || '%' AND :#{#cri.searchType} = 'tc') OR " +
+	        "   (content LIKE '%' || :#{#cri.keyword} || '%' AND writer LIKE '%' || :#{#cri.keyword} || '%' AND :#{#cri.searchType} = 'cw') OR " +
+	        "   (title LIKE '%' || :#{#cri.keyword} || '%' AND content LIKE '%' || :#{#cri.keyword} || '%' AND writer LIKE '%' || :#{#cri.keyword} || '%' AND :#{#cri.searchType} = 'tcw')" +
 	        ") " +
-	        "WHERE rnum BETWEEN :cri.pageStart + 1 AND (:cri.pageStart + :cri.perPageNum) " +
+	        ") numbered " +
+	        "WHERE rnum BETWEEN :#{#cri.pageStart + 1} AND :#{#cri.pageStart + #cri.perPageNum} " +
 	        "ORDER BY rnum", nativeQuery = true)
 	List<fboard> listSearch(@Param("cri") Criteria cri);
 
