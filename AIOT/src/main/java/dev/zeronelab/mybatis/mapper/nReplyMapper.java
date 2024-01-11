@@ -10,9 +10,9 @@ import dev.zeronelab.mybatis.vo.nReplyVO;
 
 @Mapper
 public interface nReplyMapper {
-  public List<nReplyVO> list(@Param("bNo")Integer bNo) throws Exception;
-
   public void addReply(@Param("bNo")String bNo,@Param("replyText")String replyText,@Param("replyer")String replyer) throws Exception;
+ 
+  public List<nReplyVO> list(@Param("bNo")Integer bNo) throws Exception;
 
   public void modify(nReplyVO vo) throws Exception;
 
@@ -22,5 +22,4 @@ public interface nReplyMapper {
 
   public int count(Integer bNo) throws Exception;
 
-  public String getBNo(@Param("rNo")Integer rNo) throws Exception;
 }

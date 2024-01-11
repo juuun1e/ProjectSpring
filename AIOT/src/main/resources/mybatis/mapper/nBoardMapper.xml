@@ -4,44 +4,16 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dev.zeronelab.mybatis.mapper.nBoardMapper">
 
-	<!-- 게시물 전체 목록 조회 쿼리 -->
-	<select id="selectBoardList"
-		resultType="dev.zeronelab.mybatis.vo.nBoardVO" parameterType="map">
-	<![CDATA[
-    	SELECT * FROM (
-        	SELECT
-            	bNo, title, content, writer, regidate, viewCnt, replyCnt,
-            	ROW_NUMBER() OVER (ORDER BY bNo DESC, regidate DESC) AS rnum
-        	FROM
-            	nBoard
-    		)numbered
-    	WHERE
-        	numbered.rnum BETWEEN  #{pageStart} +1 AND (#{pageStart} + #{perPageNum})
-    	ORDER BY 
-    		numbered.rnum
-    ]]>
-	</select>
-
-
-	<!-- <select id="listCriteria" resultType="dev.zeronelab.mybatis.vo.nBoardVO"> 
-		<![CDATA[ SELECT * FROM ( select bNo, title, content, writer, regidate, viewCnt 
-		, replyCnt, ROW_NUMBER() OVER (ORDER BY bNo DESC, regidate DESC) AS rnum 
-		from nBoard where bNo > 0 ) WHERE rnum BETWEEN #{pageStart} AND (#{pageStart} 
-		+ #{perPageNum} - 1) order by bNo desc, regidate desc limit #{pageStart}, 
-		#{perPageNum} ]]> </select> -->
-
 	<!-- 검색 조건에 따른 게시물 목록 조회 쿼리 -->
 	<select id="listSearch"
 		resultType="dev.zeronelab.mybatis.vo.nBoardVO">
 		SELECT * FROM (
 		SELECT
-		bNo, title, content, writer, regidate, viewCnt,
-		replyCnt,
-		ROW_NUMBER() OVER (ORDER BY bNo DESC, regidate DESC) AS rnum
-		FROM
-		nBoard
-		WHERE
-		bNo > 0
+			bNo, title, content, writer, regidate, viewCnt, replyCnt,
+			ROW_NUMBER() OVER (ORDER BY bNo DESC, regidate DESC) AS rnum
+		FROM nBoard
+			WHERE bNo > 0
+			
 		<if test="searchType == 't'.toString()">
 			AND (title LIKE '%' || #{keyword} || '%')
 		</if>
@@ -68,18 +40,9 @@
 		</if>
 		)
 		WHERE
-		rnum BETWEEN #{pageStart} + 1 AND (#{pageStart} + #{perPageNum})
+			rnum BETWEEN #{pageStart} + 1 AND (#{pageStart} + #{perPageNum})
 		ORDER BY
-		rnum
-	</select>
-
-
-	<!-- 검색 조건에 따른 게시물 수 조회 쿼리 -->
-	<select id="selectBoardListCount" resultType="int">
-	<![CDATA[
-		SELECT COUNT(*) FROM nBoard
-		WHERE bNo > 0
-	]]>
+			rnum
 	</select>
 
 
@@ -88,10 +51,7 @@
 		SELECT COUNT(*) FROM nBoard
 		<include refid="search" />
 	</select>
-
-
-	<!-- <select id="countPaging" resultType="int"> <![CDATA[ SELECT COUNT(bNo) 
-		FROM nBoard WHERE bNo > 0 ]]> </select> -->
+	
 
 	<!-- 검색 조건 SQL -->
 	<sql id="search">
@@ -121,32 +81,34 @@
 			</where>
 		</if>
 	</sql>
-
-
-	<!-- 글 작성 -->
-	<insert id="write">
+	
+	
+	<!-- 게시물 전체 목록 조회 쿼리 -->
+	<select id="selectBoardList"
+		resultType="dev.zeronelab.mybatis.vo.nBoardVO" parameterType="map">
 	<![CDATA[
-		insert into nBoard (writer, title, content, viewCnt, replyCnt)
-		values(#{writer}, #{title}, #{content}, #{viewCnt}, #{replyCnt})
-	]]>
-	</insert>
-
-
-	<!-- 글 조회 -->
-	<select id="read"
-		resultType="dev.zeronelab.mybatis.dto.nBoardDTO">
-		SELECT *
-		FROM nBoard
-		WHERE bNo = #{bNo}
+    	SELECT * FROM (
+        	SELECT
+            	bNo, title, content, writer, regidate, viewCnt, replyCnt,
+            	ROW_NUMBER() OVER (ORDER BY bNo DESC, regidate DESC) AS rnum
+        	FROM
+            	nBoard
+    		)numbered
+    	WHERE
+        	numbered.rnum BETWEEN  #{pageStart} +1 AND (#{pageStart} + #{perPageNum})
+    	ORDER BY 
+    		numbered.rnum
+    ]]>
 	</select>
 
 
-	<!-- 글 삭제 -->
-	<delete id="delete">
-		delete
-		from nBoard
-		where bNo = #{bNo}
-	</delete>
+	<!-- 검색 조건에 따른 게시물 수 조회 쿼리 -->
+	<select id="selectBoardListCount" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) FROM nBoard
+		WHERE bNo > 0
+	]]>
+	</select>
 
 
 	<!-- 조회수 -->
@@ -159,14 +121,31 @@
 	</update>
 
 
-	<!-- 글 수정 -->
-	<update id="update" parameterType="map">
+	<!-- 글 조회 -->
+	<select id="read"
+		resultType="dev.zeronelab.mybatis.dto.nBoardDTO">
+		SELECT *
+		FROM nBoard
+		WHERE bNo = #{bNo}
+	</select>
+	
+	<!--글에 첨부된 이미지 조회 -->
+	<select id="getImageDTOList"
+		resultType="dev.zeronelab.mybatis.dto.nBoardImageDTO">
 	<![CDATA[
-		update nBoard
-		set title = #{title}, content = #{content}
-		where bNo = #{bNo}
+		select imgName,uuid,path 
+		from nAttach where bNo = #{bNo} order by regdate
 	]]>
-	</update>
+	</select>
+
+
+	<!-- 글 작성 -->
+	<insert id="write">
+	<![CDATA[
+		insert into nBoard (writer, title, content, viewCnt, replyCnt)
+		values(#{writer}, #{title}, #{content}, #{viewCnt}, #{replyCnt})
+	]]>
+	</insert>
 
 
 	<!-- 첨부파일 -->
@@ -178,19 +157,17 @@
 	</insert>
 
 
-	<select id="getImageDTOList"
-		resultType="dev.zeronelab.mybatis.dto.nBoardImageDTO">
+	<!-- 글 수정 -->
+	<update id="update" parameterType="map">
 	<![CDATA[
-		select imgName,uuid,path 
-		from nAttach where bNo = #{bNo} order by regdate
-			]]>
-	</select>
+		update nBoard
+		set title = #{title}, content = #{content}
+		where bNo = #{bNo}
+	]]>
+	</update>
+	
 
-	<!-- <select id="getAttach" resultType="string" > <![CDATA[ select imgName 
-		from nAttach where bNo = #{bNo} order by regdate ]]> </select> -->
-
-
-	<!-- 수정 -->
+	<!--첨부파일 수정 -->
 	<insert id="replaceAttach">
 	<![CDATA[
 		INSERT INTO nAttach (imgName, uuid, path,  bNo)
@@ -198,17 +175,29 @@
 	]]>
 	</insert>
 
-	<!-- 삭제 -->
+
+	<!--첨부파일 삭제 -->
 	<delete id="deleteAttach">
 	<![CDATA[
-delete from nAttach where bNo = #{bNo}
-]]>
+		delete from nAttach where bNo = #{bNo}
+	]]>
 	</delete>
-<update id="updateReplyCnt">
- <![CDATA[
-  UPDATE nboard
-  SET replycnt = replycnt + #{amount}
-  WHERE bNo = #{bNo}
+	
+	
+	<!-- 글 삭제 -->
+	<delete id="delete">
+		delete
+		from nBoard
+		where bNo = #{bNo}
+	</delete>
+
+	<!-- 댓글 열람 시 조회수 증가 -->
+	<update id="updateReplyCnt">
+	 <![CDATA[
+ 		 UPDATE nboard
+ 		 SET replycnt = replycnt + #{amount}
+  		 WHERE bNo = #{bNo}
     ]]>
     </update>
+    
 </mapper>

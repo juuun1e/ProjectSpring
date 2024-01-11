@@ -1,10 +1,8 @@
 package dev.zeronelab.mybatis.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,22 +77,11 @@ public class RestApiBoardController {
 	}
 
 	// 게시글 읽기
-
-	/*
-	 * @RequestMapping(value = "/read", method = RequestMethod.POST) public
-	 * List<nBoardVO> read(@RequestBody Map<String, Integer> request) throws
-	 * Exception { logger.info("read post ..........."); int bNo =
-	 * request.get("bNo"); mapper.updateCounts(bNo); List<nBoardVO> list =
-	 * mapper.read(bNo);
-	 * 
-	 * return list; }
-	 */
-
 	@RequestMapping(value = "/read", method = RequestMethod.POST)
 	public nBoardDTO read(@RequestBody Map<String, Integer> request) throws Exception {
 		int bNo = request.get("bNo");
 
-		// 필요한 작업 수행
+		// 조회수
 		mapper.updateCounts(bNo);
 
 		// 게시글 정보 가져오기
@@ -110,11 +97,10 @@ public class RestApiBoardController {
 	}
 
 	private List<nBoardImageDTO> getImageDTOList(int bNo) {
-		return mapper.getImageDTOList(bNo); // YourMapper에서 실제로 이미지 정보를 조회하는 메서드를 호출하도록 변경
+		return mapper.getImageDTOList(bNo); // 실제로 이미지 정보를 조회하는 메서드를 호출하도록 변경
 	}
 
 	// 게시글 작성
-
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public String writePOST(@RequestBody nBoardDTO nBoardDTO) throws Exception {
 		System.out.println("nBoardDTO: " + nBoardDTO);
@@ -138,34 +124,6 @@ public class RestApiBoardController {
 	}
 
 	// 게시글 수정
-	/*
-	 * @RequestMapping(value = "/modify", method = RequestMethod.POST) public String
-	 * modify(@RequestBody Map<String, Object> requestBody, nBoardDTO nBoardDTO)
-	 * throws Exception { logger.info("modifyPagingpost...........");
-	 * 
-	 * // Extracting the post number, title, and content from the request body
-	 * sentby // the client Integer bNo = (Integer) requestBody.get("bNo"); String
-	 * title = (String) requestBody.get("title"); String content = (String)
-	 * requestBody.get("content");
-	 * 
-	 * logger.info("Post number is used: " + bNo);
-	 * 
-	 * // Calling the update method of MyBatis using the extracted values
-	 * mapper.update(title, content, bNo);
-	 * 
-	 * mapper.deleteAttach(bNo);
-	 * 
-	 * List<nBoardImageDTO> imageDTOList = nBoardDTO.getImageDTOList();
-	 * 
-	 * if (imageDTOList != null && !imageDTOList.isEmpty()) { for (nBoardImageDTO
-	 * imageDTO : imageDTOList) { String imgName = imageDTO.getImgName(); String
-	 * uuid = imageDTO.getUuid(); String path = imageDTO.getPath();
-	 * 
-	 * // mapper에 fileName, uuid, path 등을 활용한 로직 추가 mapper.replaceAttach(imgName,
-	 * uuid, path, bNo); } } return "succ";
-	 * 
-	 * }
-	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String modify(@RequestBody Map<String, Object> requestBody) throws Exception {
 		logger.info("modifyPagingpost...........");
@@ -204,8 +162,6 @@ public class RestApiBoardController {
 		} else {
 			// 적절한 타입이 아닌 경우에 대한 처리
 		}
-
-		// 이미지 처리 완료 후 추가로 실행할 로직을 추가할 수 있습니다.
 
 		return "succ";
 	}

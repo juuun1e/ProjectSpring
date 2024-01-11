@@ -17,35 +17,33 @@ import dev.zeronelab.mybatis.vo.nBoardVO;
 
 @Mapper
 public interface nBoardMapper {
-	List<nBoardVO> selectBoardList(Criteria cri) throws Exception;
-
 	List<nBoardVO> listSearch(Criteria cri);
 
 	int listSearchCount(SearchCriteria cri);
+	
+	List<nBoardVO> selectBoardList(Criteria cri) throws Exception;
 
 	int selectBoardListCount(SearchCriteria cri);
 
-	void write(nBoardDTO vo);
-
-	// List<nBoardVO> read(int bNo);
+	void updateCounts(Integer bNo);
 
 	nBoardDTO read(int bNo);
 
-	void updateCounts(Integer bNo);
+	List<nBoardImageDTO> getImageDTOList(int bNo);
 
-	void update(@Param("title") String title, @Param("content") String content, @Param("bNo") String bNo);
-
-	void delete(int bNo);
+	void write(nBoardDTO vo);
 
 	public void addAttach(@Param("imgName") String imgName, @Param("uuid") String uuid, @Param("path") String path)
 			throws Exception;
 
-	public void replaceAttach(@Param("imgName") String imgName, @Param("uuid") String uuid, @Param("path") String path,
-			@Param("bNo") String bNo) throws Exception;
+	void update(@Param("title") String title, @Param("content") String content, @Param("bNo") String bNo);
 
 	public void deleteAttach(String bNo) throws Exception;
 
-	List<nBoardImageDTO> getImageDTOList(int bNo);
+	public void replaceAttach(@Param("imgName") String imgName, @Param("uuid") String uuid, @Param("path") String path,
+			@Param("bNo") String bNo) throws Exception;
+
+	void delete(int bNo);
 
 	public void updateReplyCnt(@Param("bNo")String bNo,@Param("amount") int amount) throws Exception;
 }

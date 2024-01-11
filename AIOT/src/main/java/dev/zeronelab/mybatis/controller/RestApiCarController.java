@@ -14,10 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.zeronelab.mybatis.mapper.CarMapper;
 import dev.zeronelab.mybatis.vo.CarVO;
 
-/**
- * Handles requests for the application home page.
- */
-
 @RestController
 @RequestMapping("/api/car")
 public class RestApiCarController {
@@ -39,16 +35,15 @@ public class RestApiCarController {
 		return list;
 	}
 
-	
 	// memId로 차량정보 조회
 	@RequestMapping(value = "/read", method = RequestMethod.POST)
-	public  List<CarVO> read(@RequestBody CarVO vo) throws Exception {
+	public List<CarVO> read(@RequestBody CarVO vo) throws Exception {
 		logger.info("read post ...........");
 		logger.info("MemId: " + vo.getMemId());
 
 		List<CarVO> list = carmapper.read(vo.getMemId());
-		
-		 return list;
+
+		return list;
 	}
 
 	// 차량등록
@@ -61,10 +56,8 @@ public class RestApiCarController {
 		carmapper.carRegi(vo);
 
 		return "succ";
-
-		
 	}
-	
+
 	// 차량번호 중복 체크
 	@RequestMapping(value = "/carNumCK", method = RequestMethod.POST)
 	public CarVO carNumCk(@RequestBody CarVO vo) throws Exception {
@@ -72,19 +65,17 @@ public class RestApiCarController {
 		logger.info("carNum: " + vo.getCarNum());
 
 		return carmapper.carNumCK(vo.getCarNum());
-
 	}
 
 	// 차량정보삭제
-		@RequestMapping(value = "/remove", method = RequestMethod.POST)
-		public String delete(@RequestBody CarVO vo) throws Exception {
+	@RequestMapping(value = "/remove", method = RequestMethod.POST)
+	public String delete(@RequestBody CarVO vo) throws Exception {
 
-			logger.info("remove post ...........");
-			logger.info(vo.toString());
+		logger.info("remove post ...........");
+		logger.info(vo.toString());
 
-			carmapper.delete(vo);
+		carmapper.delete(vo);
 
-			return "succ";
-
-		}
+		return "succ";
+	}
 }

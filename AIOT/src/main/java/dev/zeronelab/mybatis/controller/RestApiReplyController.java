@@ -23,28 +23,17 @@ import dev.zeronelab.mybatis.vo.nReplyVO;
 
 @RestController
 @RequestMapping("/api/reply")
-public class RestReplyController {
+public class RestApiReplyController {
 
 	private static final Logger logger = LoggerFactory.getLogger(RestApiBoardController.class);
 
 	@Autowired
 	private nReplyMapper mapper;
-	
+
 	@Autowired
 	private nBoardMapper Mapper;
-	
 
-	// 댓글 추가
-	/*
-	 * @RequestMapping(value = "/add", method = RequestMethod.POST) public
-	 * ResponseEntity<String> register(@RequestBody nReplyVO vo) {
-	 * logger.info("............ADD post ...........");
-	 * 
-	 * ResponseEntity<String> entity = null; try { mapper.addReply(vo); entity = new
-	 * ResponseEntity<String>("SUCCESS", HttpStatus.OK); } catch (Exception e) {
-	 * e.printStackTrace(); entity = new ResponseEntity<String>(e.getMessage(),
-	 * HttpStatus.BAD_REQUEST); } return entity; }
-	 */
+	// 댓글 등록
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public ResponseEntity<String> register(@RequestBody Map<String, Object> requestBody) {
 		logger.info("............ADD post ...........");
@@ -98,8 +87,8 @@ public class RestReplyController {
 
 	// 댓글 삭제
 	@RequestMapping(value = "/{rNo}/{bNo}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> remove(@PathVariable("rNo") Integer rNo,@PathVariable("bNo") String bNo)throws Exception {
-		//String bNo = mapper.getBNo(rNo);
+	public ResponseEntity<String> remove(@PathVariable("rNo") Integer rNo, @PathVariable("bNo") String bNo)
+			throws Exception {
 		ResponseEntity<String> entity = null;
 		try {
 			mapper.remove(rNo);
@@ -144,5 +133,4 @@ public class RestReplyController {
 		}
 		return entity;
 	}
-
 }

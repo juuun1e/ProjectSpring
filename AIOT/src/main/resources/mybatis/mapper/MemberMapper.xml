@@ -4,6 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dev.zeronelab.mybatis.mapper.MemberMapper">
 
+	<!-- 회원 리스트 -->
 	<select id="selectMemberList"
 		resultType="dev.zeronelab.mybatis.vo.Member">
 		select *
@@ -12,6 +13,18 @@
 	</select>
 
 
+	<!-- memNo로 회원정보 조회 -->
+	<select id="read" resultType="dev.zeronelab.mybatis.vo.Member">
+
+		select *
+		from member
+		where memNo =
+		#{memNo}
+
+	</select>
+	
+	
+	<!-- 회원가입 -->
 	<insert id="register">
 
 		insert into member (memName, memNickName, memId, memPw)
@@ -19,6 +32,9 @@
 
 	</insert>
 
+
+
+	<!-- pw 일치여부 체크 -->
 	<select id="getHashedPasswordByEmail"
 		resultType="java.lang.String">
 
@@ -28,6 +44,8 @@
 
 	</select>
 
+
+	<!-- 로그인 -->
 	<select id="login" resultType="dev.zeronelab.mybatis.vo.Member"
 		parameterType="map">
 
@@ -39,16 +57,8 @@
 
 	</select>
 
-	<select id="read" resultType="dev.zeronelab.mybatis.vo.Member">
 
-		select *
-		from member
-		where memNo =
-		#{memNo}
-
-	</select>
-
-
+	<!-- 쿠키가 있다면 로그인 유지 -->
 	<update id="keepLogin">
 
 		update member
@@ -57,9 +67,9 @@
 		where memId = #{memId}
 
 	</update>
-	<!-- <select id="checkUserWithSessionKey" resultType="dev.zeronelab.mybatis.vo.Member"> 
-		select * from member where sessionKey = #{value} and sessionlimit > now() 
-		</select> -->
+
+
+	<!-- 이메일로 mid 체크 -->
 	<select id="emailCk" resultType="dev.zeronelab.mybatis.vo.Member">
 
 		select memNo, memId
@@ -68,6 +78,8 @@
 
 	</select>
 
+
+	<!-- 닉네임 중복체크 -->
 	<select id="ninameCk" resultType="dev.zeronelab.mybatis.vo.Member">
 
 		select memNo, memId
@@ -76,6 +88,8 @@
 
 	</select>
 
+
+	<!-- 마이페이지 회원정보 조회 -->
 	<select id="readMember" resultType="dev.zeronelab.mybatis.vo.Member">
 
 		select memId, memNickName, memName,
@@ -85,6 +99,8 @@
 
 	</select>
 
+
+	<!-- 마이페이지 회원정보 수정 -->
 	<update id="modifyMember">
 
 		update member set memName = #{memName}, memNickName = #{memNickName}, memPw = #{memPw}
@@ -93,40 +109,7 @@
 	</update>
 
 
-	<update id="modifyName">
-
-		update member
-		set memName = #{memName}
-		where memId = #{memId}
-
-	</update>
-
-	<update id="modifyNiname">
-
-		update member
-		set memNickName = #{memNickName}
-		where memId =
-		#{memId}
-
-	</update>
-
-	<update id="modifyPw">
-
-		update member
-		set memPw = #{memPw}
-		where memId = #{memId}
-
-	</update>
-
-<!-- 	<update id="modifyLoca">
-
-		update member
-		set locagree =#{locagree}
-		where memId =
-		#{memId}
-
-	</update> -->
-
+	<!-- 회원탈퇴 -->
 	<delete id="delete">
 
 		delete from member

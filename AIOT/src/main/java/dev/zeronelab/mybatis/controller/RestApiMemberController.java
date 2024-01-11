@@ -27,10 +27,6 @@ import dev.zeronelab.mybatis.vo.Member;
 import util.JwtUtils;
 import util.PasswordEncoder;
 
-/**
- * Handles requests for the application home page.
- */
-
 @RestController
 @RequestMapping("/api/member")
 public class RestApiMemberController {
@@ -56,14 +52,13 @@ public class RestApiMemberController {
 		return list;
 	}
 
-	// mid로 회원정보 조회
+	// mNo로 회원정보 조회
 	@RequestMapping(value = "/read", method = RequestMethod.POST)
 	public Member read(@RequestBody Member mem) throws Exception {
 		logger.info("read post ...........");
 		logger.info(mem.toString());
 
 		return membermapper.read(mem.getMemNo());
-
 	}
 
 	/// 회원가입
@@ -78,9 +73,6 @@ public class RestApiMemberController {
 
 		System.out.println("해시된 비밀번호:" + hashedPassword);
 
-//		boolean isPasswordMatch = passwordEncoder.matches(mem.getPw(), hashedPassword);
-//		System.out.println("비밀번호 일치 여부:" + isPasswordMatch);
-
 		mem.setMemPw(hashedPassword);
 
 		membermapper.register(mem);
@@ -88,10 +80,6 @@ public class RestApiMemberController {
 	}
 
 	// 로그인
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public void loginGET(@ModelAttribute("dto") LoginDTO dto) {
-	}
-
 	@RequestMapping(value = "/loginPost", method = RequestMethod.POST)
 	public Member loginPOST(@RequestBody LoginDTO dto) throws Exception {
 
@@ -106,7 +94,6 @@ public class RestApiMemberController {
 		boolean memId = jwtUtils.validateToken(token, dto.getMemId());
 		System.out.println("email=" + memId);
 
-		
 		String storedHashedPassword = membermapper.getHashedPasswordByEmail(dto.getMemId());
 
 		logger.info("Stored Hashed Password: " + storedHashedPassword);
@@ -116,18 +103,15 @@ public class RestApiMemberController {
 
 		logger.info("비밀번호 일치 여부: " + isPasswordMatch);
 
-		
 		if (isPasswordMatch) {
 			dto.setMemPw(storedHashedPassword);
-			logger.info("/*** dto.toString()="+dto.toString());
+			logger.info("/*** dto.toString()=" + dto.toString());
 			return membermapper.login(dto);
-		} else {
-			// Passwords do not match, handle the error (e.g., return an error response)
-			return null; // Adjust the return type accordingly
+		} else { // 불일치 시 오류 응답 반환
+			return null;
 		}
 	}
-	
-	
+
 	@RequestMapping(value = "/loginCookie", method = RequestMethod.POST)
 	public Member loginCookie(@RequestBody LoginDTO dto) throws Exception {
 
@@ -142,34 +126,28 @@ public class RestApiMemberController {
 		boolean email = jwtUtils.validateToken(token, dto.getMemId());
 		System.out.println("email=" + email);
 
-		
 		String storedHashedPassword = membermapper.getHashedPasswordByEmail(dto.getMemId());
 
 		logger.info("Stored Hashed Password: " + storedHashedPassword);
 
-		//BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		//boolean isPasswordMatch = passwordEncoder.matches(dto.getPw(), storedHashedPassword);
 		boolean isPasswordMatch = false;
 		if (storedHashedPassword != null && dto.getMemPw() != null) {
-		    isPasswordMatch = storedHashedPassword.equals(dto.getMemPw());
+			isPasswordMatch = storedHashedPassword.equals(dto.getMemPw());
 		} else {
-		    // storedHashedPassword 또는 dto.getPw()가 null인 경우 처리할 내용
+			return null;
 		}
 
 		logger.info("비밀번호 일치 여부: " + isPasswordMatch);
 
-		
 		if (isPasswordMatch) {
-			//dto.setPw(storedHashedPassword);
-			logger.info("/*** dto.toString()="+dto.toString());
+			// dto.setPw(storedHashedPassword);
+			logger.info("/*** dto.toString()=" + dto.toString());
 			return membermapper.login(dto);
 		} else {
-			// Passwords do not match, handle the error (e.g., return an error response)
-			return null; // Adjust the return type accordingly
+			return null;
 		}
 	}
 
-	
 	// 로그아웃
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request, HttpServletResponse response, HttpSession session)
@@ -192,9 +170,7 @@ public class RestApiMemberController {
 				membermapper.keepLogin(mem.getMemId(), session.getId(), new Date());
 			}
 		}
-
 		return "success";
-
 	}
 
 	// 이메일 중복체크
@@ -204,8 +180,8 @@ public class RestApiMemberController {
 		logger.info(mem.toString());
 
 		return membermapper.emailCk(mem.getMemId());
-
 	}
+
 	// 이메일로 mid 체크
 	@RequestMapping(value = "/midCk", method = RequestMethod.POST)
 	public Member midCk(@RequestBody Member mem) throws Exception {
@@ -223,7 +199,6 @@ public class RestApiMemberController {
 		logger.info(mem.toString());
 
 		return membermapper.ninameCk(mem.getMemNickName());
-
 	}
 
 	// 마이페이지 회원정보 조회
@@ -246,11 +221,8 @@ public class RestApiMemberController {
 
 		System.out.println("해시된 비밀번호:" + hashedPassword);
 
-//		boolean isPasswordMatch = passwordEncoder.matches(mem.getPw(), hashedPassword);
-//		System.out.println("비밀번호 일치 여부:" + isPasswordMatch);
-
 		mem.setMemPw(hashedPassword);
-		
+
 		membermapper.modifyMember(mem);
 
 		rttr.addAttribute("name", mem.getMemName());
@@ -261,80 +233,6 @@ public class RestApiMemberController {
 		return "SUCCESS";
 
 	}
-	@RequestMapping(value = "/modifyName", method = RequestMethod.POST)
-	public String modifyNamePOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
-
-		logger.info(mem.toString());
-
-		membermapper.modifyName(mem);
-
-		rttr.addAttribute("name", mem.getMemName());
-		rttr.addFlashAttribute("msg", "SUCCESS");
-
-		logger.info(rttr.toString());
-
-		return "SUCCESS";
-
-	}
-
-	@RequestMapping(value = "/modifyNiname", method = RequestMethod.POST)
-	public String modifyNinamePOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
-
-		logger.info(mem.toString());
-
-		membermapper.modifyNiname(mem);
-
-		rttr.addAttribute("niname", mem.getMemNickName());
-		rttr.addFlashAttribute("msg", "SUCCESS");
-
-		logger.info(rttr.toString());
-
-		return "SUCCESS";
-	}
-
-	@RequestMapping(value = "/modifyPw", method = RequestMethod.POST)
-	public String modifyPwPOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
-
-		logger.info(mem.toString());
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String hashedPassword = passwordEncoder.encode(mem.getMemPw());
-		
-		System.out.println("해시된 비밀번호:" + hashedPassword);
-		
-		BCryptPasswordEncoder passwordEncoder1 = new BCryptPasswordEncoder();
-		String hashedPassword1 = passwordEncoder1.encode(mem.getMemPw());
-
-		System.out.println("해시된 비밀번호:" + hashedPassword1);
-
-//		boolean isPasswordMatch = passwordEncoder.matches(mem.getPw(), hashedPassword);
-//		System.out.println("비밀번호 일치 여부:" + isPasswordMatch);
-
-		mem.setMemPw(hashedPassword1);
-		membermapper.modifyPw(mem);
-
-		rttr.addAttribute("pw", mem.getMemPw());
-		rttr.addFlashAttribute("msg", "SUCCESS");
-		
-
-		logger.info(rttr.toString());
-
-		return "SUCCESS";
-	}
-
-//	@RequestMapping(value = "/modifyLocagree", method = RequestMethod.POST)
-//	public String modifyLocagreePOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
-//
-//		logger.info(mem.toString());
-//
-//		membermapper.modifyLoca(mem);
-//
-//		rttr.addAttribute("locagree", mem.getLocagree());
-//		rttr.addFlashAttribute("msg", "SUCCESS");
-//
-//		logger.info(rttr.toString());
-//
-//		return "SUCCESS";
-//	}
 
 	// 회원탈퇴
 	@RequestMapping(value = "/deleteMember", method = RequestMethod.POST)
@@ -346,6 +244,5 @@ public class RestApiMemberController {
 		membermapper.delete(mem.getMemId());
 
 		return "succ";
-
 	}
 }

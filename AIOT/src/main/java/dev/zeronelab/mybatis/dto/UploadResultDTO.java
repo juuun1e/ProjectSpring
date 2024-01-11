@@ -35,9 +35,4 @@ public class UploadResultDTO  implements Serializable {
         return "";
     }
 
-   
-
-        // 클래스의 나머지 부분
-        // ...
-    
 }
