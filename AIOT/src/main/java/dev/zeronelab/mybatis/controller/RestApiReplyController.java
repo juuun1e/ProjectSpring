@@ -22,7 +22,7 @@ import dev.zeronelab.mybatis.vo.PageMaker;
 import dev.zeronelab.mybatis.vo.nReplyVO;
 
 @RestController
-@RequestMapping("/api/reply")
+@RequestMapping("/api/nreply")
 public class RestApiReplyController {
 
 	private static final Logger logger = LoggerFactory.getLogger(RestApiBoardController.class);
