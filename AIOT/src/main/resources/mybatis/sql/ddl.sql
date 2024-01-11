@@ -5,6 +5,7 @@ GRANT CONNECT, RESOURCE TO AIOT;
 
 
 --member테이블 생성
+drop table carRegi;
 drop table MEMBER;
 CREATE TABLE MEMBER (
     memNo NUMBER PRIMARY KEY,
@@ -12,9 +13,7 @@ CREATE TABLE MEMBER (
     memPw VARCHAR2(200)  NOT NULL,
     memNickName VARCHAR2(100) NOT NULL,
     memName VARCHAR2(100) NOT NULL,
-    regdate TIMESTAMP DEFAULT SYSTIMESTAMP,
-    sessionid VARCHAR2(100),
-    limittime VARCHAR2(100)
+    regdate TIMESTAMP DEFAULT SYSTIMESTAMP
 );
 
 drop SEQUENCE memNo_seq;
@@ -32,7 +31,6 @@ END;
 
 
 -- 차량등록 테이블
-drop table carRegi;
 CREATE TABLE carRegi (
     carNo NUMBER PRIMARY KEY, -- 차량ID
     carNum VARCHAR2(20) NOT NULL, --차량번호
@@ -60,6 +58,8 @@ END;
 
 
 --게시판
+drop table nReply;
+drop table nAttach;
 drop table nBoard;
 CREATE table nBoard (
  bNo number PRIMARY KEY, 
@@ -86,7 +86,6 @@ END;
 
 
 --댓글
-drop table nReply;
 CREATE table nReply (
  rNo number  primary KEY,
  bNo number,
@@ -114,13 +113,12 @@ CREATE OR REPLACE TRIGGER rNo_trigger
 BEFORE INSERT ON nReply
 FOR EACH ROW
 BEGIN
-    SELECT rNo_Seq.NEXTVAL INTO :new.rNo FROM dual;
+    SELECT rNo_seq.NEXTVAL INTO :new.rNo FROM dual;
 END;
 /
 
 
 --첨부파일
-drop table nAttach;
 CREATE TABLE nAttach (
   uuid VARCHAR2(200),
   imgName varchar2(200),
@@ -148,10 +146,6 @@ CREATE OR REPLACE TRIGGER aNo_trigger
 BEFORE INSERT ON nAttach
 FOR EACH ROW
 BEGIN
-    SELECT aNo_Seq.NEXTVAL INTO :new.aNo FROM dual;
+    SELECT aNo_seq.NEXTVAL INTO :new.aNo FROM dual;
 END;
 /
-
-SELECT bNo_seq.CURRVAL FROM dual;
-
--- 인서트 안될 시, Nboard 테이블에 1행 인서트한 뒤 시도해볼 것
