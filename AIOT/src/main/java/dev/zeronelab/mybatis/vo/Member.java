@@ -14,4 +14,6 @@ public class Member {
 	private String memNickName;
 	private String memName;
 	private Date regdate;
+	private String limittime;
+	private String sessionid;
 }
