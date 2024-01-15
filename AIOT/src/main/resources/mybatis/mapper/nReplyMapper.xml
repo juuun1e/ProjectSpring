@@ -26,7 +26,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="modify">
 	<![CDATA[
 		UPDATE nReply
-	SET replyText = #{replyText}
+	SET replyText = #{replyText},
+	modidate = CURRENT_TIMESTAMP
 	WHERE rNo = #{rNo}
 	 ]]>
 	</update>

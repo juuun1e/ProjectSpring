@@ -106,7 +106,8 @@ CREATE table nReply (
  replytext varchar2(1000),
  replyer varchar2(20),
  updateRegdate TIMESTAMP DEFAULT SYSTIMESTAMP,
- regdate TIMESTAMP DEFAULT SYSTIMESTAMP
+ regdate TIMESTAMP DEFAULT SYSTIMESTAMP,
+ modidate TIMESTAMP 
 );
 
 ALTER TABLE nReply

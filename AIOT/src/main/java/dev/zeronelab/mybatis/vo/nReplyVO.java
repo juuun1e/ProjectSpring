@@ -12,4 +12,5 @@ public class nReplyVO {
   private String replyText;
   private String replyer;
   private Date regdate;
+  private Date modidate;
 }
