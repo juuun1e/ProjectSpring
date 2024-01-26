@@ -10,9 +10,9 @@ import dev.zeronelab.mybatis.vo.CarVO;
 public interface CarMapper {
 	List<CarVO> selectCarList() throws Exception;
 
-	public List<CarVO> read(String memId);	
+	public List<CarVO> selectMemId(String memId);	
 	
-	public void carRegi(CarVO vo);
+	public void insertCar(CarVO vo);
 	
 	CarVO carNumCK(String carNum);
 

@@ -12,9 +12,9 @@ import dev.zeronelab.mybatis.vo.Member;
 public interface MemberMapper {
 	List<Member> selectMemberList() throws Exception;
 	
-	public Member read(int memNo);	
+	public Member selectMNo(int memNo);	
 	
-	public void register(Member mem);
+	public void insertMem(Member mem);
 
 	public String getHashedPasswordByEmail(String memId);
 	
@@ -28,9 +28,9 @@ public interface MemberMapper {
 
 	public Member midCk(String memId);
 
-	public Member readMember(String memId);
+	public Member selectMemId(String memId);
 	
-	public void modifyMember(Member mem);
+	public void update(Member mem);
 
 	public void delete(String memId);
 

@@ -14,7 +14,7 @@
 
 
 	<!-- 차량정보 조회 -->
-	<select id="read" resultType="dev.zeronelab.mybatis.vo.CarVO">
+	<select id="selectMemId" resultType="dev.zeronelab.mybatis.vo.CarVO">
 
 		select *
 		from CarRegi
@@ -25,7 +25,7 @@
 
 
 	<!-- 차량등록 -->
-	<insert id="carRegi">
+	<insert id="insertCar">
 
 		insert into CarRegi (carNum, carBrand, carModel, charType, memId)
 		values(#{carNum},#{carBrand},#{carModel},#{charType}, #{memId}) 

@@ -28,7 +28,7 @@ import util.JwtUtils;
 import util.PasswordEncoder;
 
 @RestController
-@RequestMapping("/api/member")
+@RequestMapping("/api/members")
 public class RestApiMemberController {
 
 	private static final Logger logger = LoggerFactory.getLogger(RestApiMemberController.class);
@@ -42,7 +42,7 @@ public class RestApiMemberController {
 
 	// 회원리스트
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public List<Member> memberdList(Model model) throws Exception {
+	public List<Member> selectList(Model model) throws Exception {
 		logger.info("// /member/list");
 
 		List<Member> list = membermapper.selectMemberList();
@@ -53,17 +53,17 @@ public class RestApiMemberController {
 	}
 
 	// mNo로 회원정보 조회
-	@RequestMapping(value = "/read", method = RequestMethod.POST)
-	public Member read(@RequestBody Member mem) throws Exception {
+	@RequestMapping(value = "/readMNo", method = RequestMethod.POST)
+	public Member selectMNo(@RequestBody Member mem) throws Exception {
 		logger.info("read post ...........");
 		logger.info(mem.toString());
 
-		return membermapper.read(mem.getMemNo());
+		return membermapper.selectMNo(mem.getMemNo());
 	}
 
 	/// 회원가입
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registPOST(@RequestBody Member mem) throws Exception {
+	public String insertMemPOST(@RequestBody Member mem) throws Exception {
 
 		logger.info("regist post ...........");
 		logger.info(mem.toString());
@@ -75,7 +75,7 @@ public class RestApiMemberController {
 
 		mem.setMemPw(hashedPassword);
 
-		membermapper.register(mem);
+		membermapper.insertMem(mem);
 		return "success";
 	}
 
@@ -202,18 +202,18 @@ public class RestApiMemberController {
 	}
 
 	// 마이페이지 회원정보 조회
-	@RequestMapping(value = "/readMember", method = RequestMethod.POST)
-	public Member readMember(@RequestBody Member mem) throws Exception {
+	@RequestMapping(value = "/read", method = RequestMethod.POST)
+	public Member selectMemId(@RequestBody Member mem) throws Exception {
 
 		// model.addAttribute("mem", membermapper.readMember(email));
 		logger.info("조회할 이메일 : " + mem.getMemId());
 
-		return membermapper.readMember(mem.getMemId());
+		return membermapper.selectMemId(mem.getMemId());
 	}
 
 	// 마이페이지 회원정보 수정
-	@RequestMapping(value = "/modifyMember", method = RequestMethod.POST)
-	public String modifyMemberPOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public String updatePOST(@RequestBody Member mem, RedirectAttributes rttr) throws Exception {
 
 		logger.info(mem.toString());
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -223,7 +223,7 @@ public class RestApiMemberController {
 
 		mem.setMemPw(hashedPassword);
 
-		membermapper.modifyMember(mem);
+		membermapper.update(mem);
 
 		rttr.addAttribute("name", mem.getMemName());
 		rttr.addFlashAttribute("msg", "SUCCESS");
@@ -235,7 +235,7 @@ public class RestApiMemberController {
 	}
 
 	// 회원탈퇴
-	@RequestMapping(value = "/deleteMember", method = RequestMethod.POST)
+	@RequestMapping(value = "/remove", method = RequestMethod.POST)
 	public String delete(@RequestBody Member mem) throws Exception {
 
 		logger.info("delete post ...........");

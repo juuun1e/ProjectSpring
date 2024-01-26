@@ -10,13 +10,13 @@ import dev.zeronelab.mybatis.vo.nReplyVO;
 
 @Mapper
 public interface nReplyMapper {
-  public void addReply(@Param("bNo")String bNo,@Param("replyText")String replyText,@Param("replyer")String replyer) throws Exception;
+  public void insertReply(@Param("bNo")String bNo,@Param("replyText")String replyText,@Param("replyer")String replyer) throws Exception;
  
-  public List<nReplyVO> list(@Param("bNo")Integer bNo) throws Exception;
+  public List<nReplyVO> selectList(@Param("bNo")Integer bNo) throws Exception;
 
-  public void modify(nReplyVO vo) throws Exception;
+  public void update(nReplyVO vo) throws Exception;
 
-  public void remove(Integer rNo) throws Exception;
+  public void delete(Integer rNo) throws Exception;
 
   public List<nReplyVO> listPage(@Param("bNo")Integer bNo,@Param("cri") Criteria cri) throws Exception;
 
