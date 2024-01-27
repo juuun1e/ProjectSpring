@@ -16,6 +16,7 @@
 
 ## 📺시연동영상
 https://youtu.be/F-7U2uUm3aY?si=HtSKNcBCeUgTa4Z7
+
 <br>
 
 ## 📍Topic
@@ -35,9 +36,7 @@ https://youtu.be/F-7U2uUm3aY?si=HtSKNcBCeUgTa4Z7
 ## 🕸 Architecture
 - Spring Framework의 `MVC2` 패턴
 - API 작동 방식의 조건을 부여하는, `REST` 기반 설계
-<p>
   ![:어디야:아키텍쳐](https://github.com/juuun1e/ProjectSpring/assets/151481791/45b4b93a-e216-4c1d-bcd7-2556a3aa2b16)
-</p>
 <br>
 
 ## 🎡 ERD
