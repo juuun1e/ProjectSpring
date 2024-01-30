@@ -11,6 +11,9 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -81,7 +84,7 @@ public class RestApiMemberController {
 
 	// 로그인
 	@RequestMapping(value = "/loginPost", method = RequestMethod.POST)
-	public Member loginPOST(@RequestBody LoginDTO dto) throws Exception {
+	public ResponseEntity<?> loginPOST(@RequestBody LoginDTO dto) throws Exception {
 
 		logger.info("// /loginPost");
 		logger.info(dto.toString());
@@ -106,11 +109,18 @@ public class RestApiMemberController {
 		if (isPasswordMatch) {
 			dto.setMemPw(storedHashedPassword);
 			logger.info("/*** dto.toString()=" + dto.toString());
-			return membermapper.login(dto);
-		} else { // 불일치 시 오류 응답 반환
-			return null;
+			Member loggedInMember = membermapper.login(dto);
+			
+			 // 토큰을 응답 헤더에 포함시켜 클라이언트로 전송
+	        HttpHeaders responseHeaders = new HttpHeaders();
+	        responseHeaders.set("Authorization", "Bearer " + token);
+	        
+	        return new ResponseEntity<>(loggedInMember, responseHeaders, HttpStatus.OK);
+	    } else { // 불일치 시 오류 응답 반환
+			return new ResponseEntity<>("로그인 실패 메시지", HttpStatus.UNAUTHORIZED);
 		}
 	}
+
 
 	@RequestMapping(value = "/loginCookie", method = RequestMethod.POST)
 	public Member loginCookie(@RequestBody LoginDTO dto) throws Exception {
