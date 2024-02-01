@@ -25,9 +25,9 @@ import dev.zeronelab.mybatis.vo.nBoardVO;
 
 @RestController
 @RequestMapping("/api/nBoards")
-public class RestApiBoardController {
+public class RestApiNBoardController {
 
-	private static final Logger logger = LoggerFactory.getLogger(RestApiBoardController.class);
+	private static final Logger logger = LoggerFactory.getLogger(RestApiNBoardController.class);
 
 	@Autowired
 	private nBoardMapper mapper;

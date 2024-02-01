@@ -25,7 +25,7 @@ import dev.zeronelab.mybatis.vo.nReplyVO;
 @RequestMapping("/api/nreplys")
 public class RestApiReplyController {
 
-	private static final Logger logger = LoggerFactory.getLogger(RestApiBoardController.class);
+	private static final Logger logger = LoggerFactory.getLogger(RestApiNBoardController.class);
 
 	@Autowired
 	private nReplyMapper mapper;
